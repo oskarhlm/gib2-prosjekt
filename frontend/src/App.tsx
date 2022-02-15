@@ -1,5 +1,5 @@
-import './App.css';
 import 'leaflet/dist/leaflet.css';
+import 'antd/dist/antd.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Map } from './components/Map';
 
