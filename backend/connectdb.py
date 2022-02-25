@@ -13,8 +13,8 @@ def connect():
         cur.execute('select geom::geometry::json from vbase_50_punkt limit 3;')
         rows = cur.fetchall()
         for row in rows:
-            y = json.loads(row)
-            print(y)
+            y = json.loads(json.dumps(row[0]))
+            print(y['coordinates'])
         cur.close()
 
     except(Exception, psycopg2.DatabaseError) as error:
