@@ -2,10 +2,11 @@ from configparser import ConfigParser
 import configparser
 from email import parser
 
+
 def config(filename='database.ini', section='postgresql'):
     parser = ConfigParser()
     parser.read(filename)
-    db={}
+    db = {}
 
     if parser.has_section(section):
         params = parser.items(section)
@@ -13,5 +14,5 @@ def config(filename='database.ini', section='postgresql'):
             db[param[0]] = param[1]
     else:
         raise Exception()
-    
+
     return db
