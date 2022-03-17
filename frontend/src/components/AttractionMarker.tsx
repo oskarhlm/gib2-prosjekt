@@ -1,13 +1,15 @@
 import Api from 'helper/api';
 import { useEffect, useState } from 'react';
-import { GeoJSONProps, Marker, Popup } from 'react-leaflet';
+import { Marker, Popup, GeoJSON, useMap } from 'react-leaflet';
 import { defaultIcon } from 'assets/icons';
+import L from 'leaflet';
 
 export type AttrationPoint = GeoJSON.Feature<GeoJSON.Point, { pid: string }>;
 
 export function AttractionMarker() {
   const api = new Api();
   const [points, setPoints] = useState<AttrationPoint[]>([]);
+  const map = useMap();
 
   useEffect(() => {
     api.fetchAttractions().then((data) => {
@@ -18,15 +20,30 @@ export function AttractionMarker() {
   return (
     <>
       {points.map((p) => {
-        const [lng, lat] = p.geometry.coordinates; // bytt rekkefølge på høyde/bredde!
         return (
-          <Marker
+          <GeoJSON
             key={p.properties.pid}
-            position={[lat, lng]}
-            icon={defaultIcon}
-          >
-            <Popup>Attraction info!</Popup>
-          </Marker>
+            data={p}
+            style={(p) => ({ color: 'green' })}
+            pointToLayer={(feature, latlng) =>
+              // new L.CircleMarker(latlng, {
+              //   radius: 5,
+              //   fillOpacity: 0.85,
+              // })
+              L.marker(latlng, { icon: defaultIcon })
+            }
+            onEachFeature={(feature, layer) =>
+              layer.bindPopup(`Layer ${p.properties.pid}`)
+            }
+          />
+          // <Marker
+          //   key={p.properties.pid}
+          //   // @ts-ignore
+          //   position={L.GeoJSON.coordsToLatLng(p.geometry.coordinates)}
+          //   icon={defaultIcon}
+          // >
+          //   <Popup>Attraction info!</Popup>
+          // </Marker>
         );
       })}
     </>

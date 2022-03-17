@@ -10,4 +10,16 @@ export default class Api implements IApi {
     const data = await res.json();
     return data;
   }
+
+  async fetchDrivingDistancePolygon() {
+    const res = await fetch(this.api_url + '/driving-distance');
+    const data = await res.json();
+    return data;
+  }
+
+  async fetchShortestPath() {
+    const res = await fetch(this.api_url + '/path');
+    const data = await res.json();
+    return data;
+  }
 }
