@@ -1,5 +1,6 @@
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { SettingsDrawer } from './SettingsDrawer';
+import { AttractionMarker } from './AttractionMarker';
 
 export function Map() {
   return (
@@ -11,6 +12,7 @@ export function Map() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomControl position="topright" />
+        <AttractionMarker />
       </MapContainer>
     </div>
   );

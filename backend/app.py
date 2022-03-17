@@ -26,8 +26,8 @@ def get_attractions():
     conn = get_connection()
     with closing(conn.cursor()) as cur:
         cur.execute(
-            'select json_agg(st_asgeojson(st_transform(geom, 3857))::json) \
-                from point'
+            'select json_agg(st_asgeojson(points.*)::json) \
+                from (select pid, st_transform(geom, 4326) from point) as points'
         )
         rows = cur.fetchone()[0]
         print(json.dumps(rows, indent=4))
