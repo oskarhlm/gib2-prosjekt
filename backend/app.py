@@ -29,7 +29,7 @@ def get_attractions():
             'select json_agg(st_asgeojson(st_transform(geom, 3857))::json) \
                 from point'
         )
-        rows = cur.fetchone()
+        rows = cur.fetchone()[0]
         print(json.dumps(rows, indent=4))
     return jsonify(rows)
 
@@ -43,7 +43,6 @@ def get_shortest_path():
                 from shortest_bike_path(270337.87, 7041814.2, 272956.1, 7038904.65, 25833);'
         )
         rows = cur.fetchone()[0]
-        print(json.dumps(rows, indent=4))
     return jsonify(rows)
 
 
