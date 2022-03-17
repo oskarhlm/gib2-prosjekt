@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import psycopg2
 import json
-from .config import config
+from config import config
 
 
 app = Flask(__name__)
@@ -29,7 +29,7 @@ def get_attractions():
             'select json_agg(st_asgeojson(st_transform(geom, 3857))::json) \
                 from point'
         )
-        rows = cur.fetchone()[0]
+        rows = cur.fetchone()
         print(json.dumps(rows, indent=4))
     return jsonify(rows)
 
@@ -60,4 +60,5 @@ def get_dd_polygon_and_points_within():
     return jsonify(rows)
 
 
-app.run()
+if __name__ == '__main__':
+    app.run(debug=True)
