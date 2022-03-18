@@ -17,7 +17,7 @@ export function Locate(props: ILocate){
             var lat = locationEvent.latlng.lat
             var lng = locationEvent.latlng.lng
             props.setLoc([lat, lng])
-            locationMarker = L.marker([lat,lng],{icon : defaultIcon}).addTo(map);
+            locationMarker = L.marker([lat,lng],{icon : defaultIcon}).addTo(map).bindPopup("DU ER HER!!!!!!!!!!!!!!!!");
         })
     }, []);
 
