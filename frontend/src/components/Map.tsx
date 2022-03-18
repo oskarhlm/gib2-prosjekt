@@ -3,8 +3,9 @@ import { SettingsDrawer } from './SettingsDrawer';
 import { AttractionMarker } from './AttractionMarker';
 import { DrivingDistancePolygon } from './DrivingDistancePolygon';
 import { Path } from './Path';
+import { Locate } from './Locate';
 import Api from 'helper/api';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Map() {
   // useEffect(() => {
@@ -13,9 +14,13 @@ export function Map() {
   //     console.log(res);
   //   });
   // });
+  const [loc, setLoc] = useState<[number, number] | null>(null);
 
   return (
     <div>
+      <h1>
+        {loc}
+      </h1>
       <SettingsDrawer />
       <MapContainer center={[63.4346, 10.3985]} zoom={13} zoomControl={false}>
         <TileLayer
@@ -26,6 +31,7 @@ export function Map() {
         <AttractionMarker />
         <DrivingDistancePolygon />
         <Path />
+        <Locate setLoc={setLoc}/>
       </MapContainer>
     </div>
   );
