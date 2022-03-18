@@ -4,7 +4,7 @@ import { AttractionMarker } from './AttractionMarker';
 import { DrivingDistancePolygon } from './DrivingDistancePolygon';
 import { Path } from './Path';
 import Api from 'helper/api';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Map() {
   // useEffect(() => {
@@ -13,6 +13,8 @@ export function Map() {
   //     console.log(res);
   //   });
   // });
+
+  // const [loc, setLoc] = useState<[number, number] | null>(null);
 
   return (
     <div>
@@ -26,6 +28,7 @@ export function Map() {
         <AttractionMarker />
         <DrivingDistancePolygon />
         <Path />
+        {/* <Locate setLoc={[1, 2]} /> */}
       </MapContainer>
     </div>
   );
