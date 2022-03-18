@@ -34,16 +34,30 @@ def get_attractions():
     return jsonify(rows)
 
 
-@app.route('/path')
+@app.route('/path', methods=['GET', 'POST'])
 def get_shortest_path():
     conn = get_connection()
     with closing(conn.cursor()) as cur:
-        cur.execute(
-            'select * \
+        if request.method == 'GET':
+            print('get biach')
+            cur.execute(
+                'select * \
                 from shortest_bike_path(270337.87, 7041814.2, 272956.1, 7038904.65, 25833);'
-        )
+            )
+            # rows = cur.fetchone()[0]
+        elif request.method == 'POST':
+            print('post bitch')
+            res = json.loads(request.data)
+            # print(res.get('startLng'))
+            cur.execute(
+                f"select * \
+                from shortest_bike_path({res.get('startLat')}, {res.get('startLng')}, \
+                    {res.get('endLat')}, {res.get('endLng')}, 25833);"
+            )
         rows = cur.fetchone()[0]
+        print(json.dumps(rows, indent=4))
     return jsonify(rows)
+    # return 'ya'
 
 
 @app.route('/driving-distance')

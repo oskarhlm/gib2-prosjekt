@@ -16,6 +16,8 @@ export function Map() {
   // });
   const [loc, setLoc] = useState<[number, number] | null>(null);
 
+  // const [loc, setLoc] = useState<[number, number] | null>(null);
+
   return (
     <div>
       <h1>
