@@ -7,21 +7,19 @@ import { Locate } from './Locate';
 import Api from 'helper/api';
 import { useEffect, useState } from 'react';
 import L from 'leaflet';
+import { useSelector } from 'react-redux';
+import { updateSettings } from 'ducks/drivingDistanceSlice';
+import store, { RootState } from 'ducks/store';
 
 export function Map() {
-  // useEffect(() => {
-  //   const api = new Api();
-  //   api.fetchShortestPath().then((res) => {
-  //     console.log(res);
-  //   });
-  // });
   const [loc, setLoc] = useState<[number, number] | null>(null);
-
-  // const [loc, setLoc] = useState<[number, number] | null>(null);
+  const settings = useSelector((state: RootState) => state.drivingDistance);
+  const location = useSelector((state: RootState) => state.location);
 
   return (
     <div>
-      <h1>{loc}</h1>
+      <h1>{JSON.stringify(settings)}</h1>
+      <h1>{JSON.stringify(location)}</h1>
       <SettingsDrawer />
       <MapContainer center={[63.4346, 10.3985]} zoom={13} zoomControl={false}>
         <TileLayer

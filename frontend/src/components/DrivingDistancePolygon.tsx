@@ -15,12 +15,6 @@ export function DrivingDistancePolygon() {
   const map = useMap();
   const purpleOptions = { color: 'purple' };
 
-  const polygonn: L.LatLngExpression[] = [
-    [51.515, -0.09],
-    [51.52, -0.1],
-    [51.52, -0.12],
-  ];
-
   useEffect(() => {
     api.fetchDrivingDistancePolygon().then((data) => {
       setPolygon(data);
