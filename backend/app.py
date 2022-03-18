@@ -39,25 +39,25 @@ def get_shortest_path():
     conn = get_connection()
     with closing(conn.cursor()) as cur:
         if request.method == 'GET':
-            print('get biach')
             cur.execute(
                 'select * \
                 from shortest_bike_path(270337.87, 7041814.2, 272956.1, 7038904.65, 25833);'
             )
-            # rows = cur.fetchone()[0]
         elif request.method == 'POST':
-            print('post bitch')
             res = json.loads(request.data)
-            # print(res.get('startLng'))
+            print(res)
+            print(f"select * \
+                from shortest_bike_path({res.get('startLng')}, {res.get('startLat')}, \
+                    {res.get('endLng')}, {res.get('endLat')}, 4326);")
             cur.execute(
                 f"select * \
-                from shortest_bike_path({res.get('startLat')}, {res.get('startLng')}, \
-                    {res.get('endLat')}, {res.get('endLng')}, 25833);"
+                from shortest_bike_path({res.get('startLng')}, {res.get('startLat')}, \
+                    {res.get('endLng')}, {res.get('endLat')}, 4326);"
             )
         rows = cur.fetchone()[0]
-        print(json.dumps(rows, indent=4))
+        print(len(rows))
+        # print(json.dumps(rows, indent=4))
     return jsonify(rows)
-    # return 'ya'
 
 
 @app.route('/driving-distance')
