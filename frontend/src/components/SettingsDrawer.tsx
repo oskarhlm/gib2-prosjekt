@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'ducks/store';
 import { updateSettings } from 'ducks/drivingDistanceSlice';
 
-export function SettingsDrawer() {
+export const SettingsDrawer = () => {
   const [collapsed, setCollapsed] = useState(false);
   const settings = useSelector((state: RootState) => state.drivingDistance);
   type DDSettings = typeof settings;
@@ -43,13 +43,9 @@ export function SettingsDrawer() {
 
   return (
     <div
-      style={{ width: 256, padding: 10, zIndex: 1000, position: 'absolute' }}
+    // style={{ width: 256, padding: 10, zIndex: 1000, position: 'absolute' }}
     >
-      <Button
-        type="default"
-        onClick={handleCollapsed}
-        style={{ marginBottom: 16 }}
-      >
+      <Button type="default" onClick={handleCollapsed}>
         <MenuOutlined />
       </Button>
       <Drawer
@@ -96,4 +92,4 @@ export function SettingsDrawer() {
       </Drawer>
     </div>
   );
-}
+};
