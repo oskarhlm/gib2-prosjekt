@@ -10,15 +10,16 @@ import {
 } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import Api from 'helper/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'ducks/store';
-import { updateSettings } from 'ducks/drivingDistanceSlice';
+import {
+  updateSettings,
+  DrivingDistanceState,
+} from 'ducks/drivingDistanceSlice';
 
 export const SettingsDrawer = () => {
   const [collapsed, setCollapsed] = useState(false);
   const settings = useSelector((state: RootState) => state.drivingDistance);
-  type DDSettings = typeof settings;
   const dispatch = useDispatch();
 
   const handleCollapsed = () => {
@@ -26,7 +27,6 @@ export const SettingsDrawer = () => {
   };
 
   const handleSubmit = (values: any) => {
-    console.log('Values recieved: ', values);
     dispatch(
       updateSettings({
         startPosition: [10, 63],
@@ -36,15 +36,13 @@ export const SettingsDrawer = () => {
         maxSlope: values.maxSlope,
         roundTrip: values.roundTrip,
         experience: parseInt(values.experienceLevel),
-      } as DDSettings)
+      } as DrivingDistanceState)
     );
     handleCollapsed();
   };
 
   return (
-    <div
-    // style={{ width: 256, padding: 10, zIndex: 1000, position: 'absolute' }}
-    >
+    <div>
       <Button type="default" onClick={handleCollapsed}>
         <MenuOutlined />
       </Button>

@@ -22,10 +22,10 @@ export const Map = () => {
     <div>
       <ButtonRow>
         <SettingsDrawer />
-        <Button type="default">
-          <MenuOutlined />
+        <Button onClick={() => alert('yo mama')}>Press me</Button>
+        <Button style={{ backgroundColor: 'coral', color: 'white' }}>
+          Lagre destinasjon
         </Button>
-        <button>Press me</button>
       </ButtonRow>
       <MapContainer center={[63.4346, 10.3985]} zoom={13} zoomControl={false}>
         <TileLayer

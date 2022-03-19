@@ -11,12 +11,13 @@ import drivingDistanceSlice, {
 
 type DrivingDistancePolygon = GeoJSON.Feature<
   GeoJSON.Polygon,
-  { pointsWithin: AttrationPoint }
+  { pointsWithin: AttrationPoint[] }
 >;
 
 export function DrivingDistancePolygon() {
   const api = new Api();
   const [polygon, setPolygon] = useState<DrivingDistancePolygon>();
+  const pointsWithin = polygon?.properties.pointsWithin;
   const map = useMap();
   const polygonOptions = {
     color: 'purple',
@@ -45,7 +46,6 @@ export function DrivingDistancePolygon() {
         ...settings,
         startPosition: [loc.lng, loc.lat],
       };
-      console.log(input);
       updatePolygon(input);
     }
   }, [settings]);
@@ -55,7 +55,14 @@ export function DrivingDistancePolygon() {
     map.flyToBounds(geojsonObject.getBounds());
 
     return (
-      <GeoJSON data={polygon} pathOptions={polygonOptions} ref={geoJsonLayer} />
+      <>
+        <GeoJSON
+          data={polygon}
+          pathOptions={polygonOptions}
+          ref={geoJsonLayer}
+        />
+        {/* {pointsWithin && pointsWithin.map((point) => <GeoJSON data={point} />)} */}
+      </>
     );
   } else {
     return null;

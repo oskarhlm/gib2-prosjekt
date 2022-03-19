@@ -16,15 +16,10 @@ export function Path({ loc }: IPath) {
   const [destination, setDestination] = useState<L.LatLng>();
 
   useEffect(() => {
-    // api.fetchShortestPath().then((res) => {
-    //   setPathSegments(res);
-    // });
-    console.log(loc, destination);
     setPathSegments(null); // pga index som key (FIX)
 
     destination &&
       api.fetchShortestPath(loc, destination).then((res) => {
-        console.log(res);
         setPathSegments(res);
       });
   }, [destination]);

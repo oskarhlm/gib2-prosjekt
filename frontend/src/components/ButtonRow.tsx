@@ -14,8 +14,10 @@ export const ButtonRow: React.FC = (props) => {
         alignItems: 'center',
       }}
     >
-      {arrayChildren.map((child) => (
-        <div style={{ marginRight: '5px' }}>{child}</div>
+      {arrayChildren.map((child, index) => (
+        <div key={index} style={{ marginRight: '5px' }}>
+          {child}
+        </div>
       ))}
     </div>
   );
