@@ -14,11 +14,9 @@ import Api from 'helper/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'ducks/store';
 import { updateSettings } from 'ducks/drivingDistanceSlice';
-import L from 'leaflet';
 
 export function SettingsDrawer() {
   const [collapsed, setCollapsed] = useState(false);
-  const api = new Api();
   const settings = useSelector((state: RootState) => state.drivingDistance);
   type DDSettings = typeof settings;
   const dispatch = useDispatch();
@@ -32,7 +30,9 @@ export function SettingsDrawer() {
     dispatch(
       updateSettings({
         startPosition: [10, 63],
-        maxMinutes: 5, //values.latestFinishTime,
+        maxMinutes: moment
+          .duration(values.latestFinishTime.diff(moment()))
+          .asMinutes(),
         maxSlope: values.maxSlope,
         roundTrip: values.roundTrip,
         experience: parseInt(values.experienceLevel),
@@ -64,7 +64,7 @@ export function SettingsDrawer() {
           onFinish={handleSubmit}
           initialValues={{
             roundTrip: false,
-            latestFinishTime: moment().add(2, 'h'),
+            latestFinishTime: moment().add(5, 'm'),
             maxSlope: 30,
             experienceLevel: '3',
           }}

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface DrivingDistanceState {
+export interface DrivingDistanceState {
   startPosition: [number, number];
   maxMinutes: number;
   roundTrip: boolean;
@@ -8,13 +8,13 @@ interface DrivingDistanceState {
   experience?: number;
 }
 
-const initialState = {} as DrivingDistanceState;
+const initialState = null as DrivingDistanceState | null;
 
 const drivingDistanceSlice = createSlice({
   name: 'drivingDistance',
   initialState,
   reducers: {
-    updateSettings(state, action: PayloadAction<DrivingDistanceState>) {
+    updateSettings(state, action: PayloadAction<DrivingDistanceState | null>) {
       return action.payload;
     },
   },
