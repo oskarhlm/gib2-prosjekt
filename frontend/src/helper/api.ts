@@ -14,7 +14,6 @@ export default class Api implements IApi {
     return data;
   }
 
-  // fromLatLng: L.LatLng, minutes: number
   async fetchDrivingDistancePolygon(settings: DrivingDistanceState) {
     const res = await fetch(this.api_url + '/driving-distance', {
       method: 'POST',

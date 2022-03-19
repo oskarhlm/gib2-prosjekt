@@ -18,7 +18,12 @@ export function DrivingDistancePolygon() {
   const api = new Api();
   const [polygon, setPolygon] = useState<DrivingDistancePolygon>();
   const map = useMap();
-  const purpleOptions = { color: 'purple' };
+  const polygonOptions = {
+    color: 'purple',
+    opacity: 0.8,
+    fillColor: 'purple',
+    fillOpacity: 0.1,
+  };
   const settings = useSelector((state: RootState) => state.drivingDistance);
   const loc = useSelector((state: RootState) => state.location);
   const geoJsonLayer = useRef<L.GeoJSON<any>>(null);
@@ -47,10 +52,10 @@ export function DrivingDistancePolygon() {
 
   if (polygon) {
     const geojsonObject = L.geoJSON(polygon);
-    map.fitBounds(geojsonObject.getBounds());
+    map.flyToBounds(geojsonObject.getBounds());
 
     return (
-      <GeoJSON data={polygon} pathOptions={purpleOptions} ref={geoJsonLayer} />
+      <GeoJSON data={polygon} pathOptions={polygonOptions} ref={geoJsonLayer} />
     );
   } else {
     return null;

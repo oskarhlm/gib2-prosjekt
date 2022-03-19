@@ -6,26 +6,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setLocation } from 'ducks/locationSlice';
 import { RootState } from 'ducks/store';
 
-interface ILocate {
-  setLoc: React.Dispatch<React.SetStateAction<[number, number] | null>>;
-}
-
-export function Locate(props: ILocate) {
+export function Locate() {
   const map = useMap();
-  // const loc = useSelector((state: RootState) => state.location);
+  const loc = useSelector((state: RootState) => state.location);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const loc = map.locate({ setView: true });
+    map.locate({ setView: true, maxZoom: 14 });
     map.on('locationfound', function (locationEvent) {
       const lat = locationEvent.latlng.lat;
       const lng = locationEvent.latlng.lng;
-      props.setLoc([lat, lng]);
-      console.log(JSON.stringify({ lat, lng }));
       dispatch(setLocation({ lat, lng }));
       L.marker([lat, lng], { icon: defaultIcon })
         .addTo(map)
-        .bindPopup('DU ER HER!!!!!!!!!!!!!!!!');
+        .bindPopup('Du er her');
     });
   }, []);
 

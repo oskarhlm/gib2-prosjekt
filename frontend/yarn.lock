@@ -5975,6 +5975,11 @@ language-tags@^1.0.5:
   dependencies:
     language-subtag-registry "~0.3.2"
 
+leaflet-maskcanvas@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/leaflet-maskcanvas/-/leaflet-maskcanvas-1.0.0.tgz#4ebfe5f0a3dcbd6ef8ccf4d5b540295e616e65c8"
+  integrity sha512-uADKXRd3NlTcvh9cX2J5YSRcuCgJjJpjKXgU+gaXjTX0De6gLxSZrK0kEzsRCOguC6VvVViXETQKCM+ArdecvA==
+
 leaflet@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"
