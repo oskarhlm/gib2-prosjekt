@@ -10,16 +10,19 @@ import {
 } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import Api from 'helper/api';
 
 export function SettingsDrawer() {
   const [collapsed, setCollapsed] = useState(false);
+  const api = new Api();
 
   const handleCollapsed = () => {
     setCollapsed(!collapsed);
   };
 
   const handleSubmit = (values: any) => {
-    console.log('Values recieved: ', values);
+    // console.log('Values recieved: ', values);
+    api.fetchAttractions().then((res) => console.log(res));
     handleCollapsed();
   };
 
