@@ -17,6 +17,11 @@ def get_connection():
     return psycopg2.connect(**config())
 
 
+@app.route('/')
+def hello_world():
+    return 'Hello, world!'
+
+
 @app.route('/<name>')
 def hello(name):
     return f"Hello, {escape(name)}"
