@@ -6,7 +6,7 @@ interface IApi {
 }
 
 export default class Api implements IApi {
-  api_url = 'http://localhost:5000';
+  api_url = 'http://localhost:5000/api';
 
   async fetchAttractions() {
     const res = await fetch(this.api_url + '/attractions');

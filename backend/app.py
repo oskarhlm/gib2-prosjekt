@@ -1,14 +1,15 @@
 from contextlib import closing
 from glob import escape
 from pydoc import resolve
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import psycopg2
 import json
 from config import config
+import os
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='../frontend/build', template_folder='../frontend/build')
 CORS(app)
 app.config['JSON_SORT_KEYS'] = False
 
@@ -19,15 +20,18 @@ def get_connection():
 
 @app.route('/')
 def hello_world():
-    return 'Hello, world!'
+    return send_from_directory(app.static_folder, 'index.html')
 
 
-@app.route('/<name>')
-def hello(name):
-    return f"Hello, {escape(name)}! waddup"
+# @app.route("/<path:path>")
+# def static_proxy(path):
+#     """static folder serve"""
+#     file_name = path.split("/")[-1]
+#     dir_name = os.path.join(app.static_folder, "/".join(path.split("/")[:-1]))
+#     return send_from_directory(dir_name, file_name)
 
 
-@app.route('/attractions')
+@app.route('/api/attractions')
 def get_attractions():
     conn = get_connection()
     with closing(conn.cursor()) as cur:
@@ -39,7 +43,7 @@ def get_attractions():
     return jsonify(rows)
 
 
-@app.route('/path', methods=['GET', 'POST'])
+@app.route('/api/path', methods=['GET', 'POST'])
 def get_shortest_path():
     conn = get_connection()
     res = json.loads(request.data)
@@ -53,7 +57,7 @@ def get_shortest_path():
     return jsonify(rows)
 
 
-@app.route('/driving-distance', methods=['POST'])
+@app.route('/api/driving-distance', methods=['POST'])
 def get_dd_polygon_and_points_within():
     conn = get_connection()
     res = json.loads(request.data)
