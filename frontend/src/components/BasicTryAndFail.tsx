@@ -1,0 +1,17 @@
+
+
+export function TryFail() {
+    return (
+    <div>   
+      
+    <h2>Use JavaScript to Change Text</h2>
+    <p>This example writes "Hello JavaScript!" into an HTML element with id="demo":</p>
+    <p id="demo"></p>
+  
+    <script>
+    document.getElementById("demo").innerHTML = "Hello JavaScript!";
+    </script> 
+    </div>
+    )
+  }
+  

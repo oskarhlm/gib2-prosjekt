@@ -10,31 +10,40 @@ import {
 } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import Api from 'helper/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'ducks/store';
+import {
+  updateSettings,
+  DrivingDistanceState,
+} from 'ducks/drivingDistanceSlice';
 
-export function SettingsDrawer() {
+export const SettingsDrawer = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const api = new Api();
+  const settings = useSelector((state: RootState) => state.drivingDistance);
+  const dispatch = useDispatch();
 
   const handleCollapsed = () => {
     setCollapsed(!collapsed);
   };
 
   const handleSubmit = (values: any) => {
-    // console.log('Values recieved: ', values);
-    api.fetchAttractions().then((res) => console.log(res));
+    dispatch(
+      updateSettings({
+        startPosition: [10, 63],
+        maxMinutes: moment
+          .duration(values.latestFinishTime.diff(moment()))
+          .asMinutes(),
+        maxSlope: values.maxSlope,
+        roundTrip: values.roundTrip,
+        experience: parseInt(values.experienceLevel),
+      } as DrivingDistanceState)
+    );
     handleCollapsed();
   };
 
   return (
-    <div
-      style={{ width: 256, padding: 10, zIndex: 1000, position: 'absolute' }}
-    >
-      <Button
-        type="default"
-        onClick={handleCollapsed}
-        style={{ marginBottom: 16 }}
-      >
+    <div>
+      <Button type="default" onClick={handleCollapsed}>
         <MenuOutlined />
       </Button>
       <Drawer
@@ -49,8 +58,7 @@ export function SettingsDrawer() {
           onFinish={handleSubmit}
           initialValues={{
             roundTrip: false,
-            latestFinishTime: moment().add(2, 'h'),
-            maxRadius: 2,
+            latestFinishTime: moment().add(5, 'm'),
             maxSlope: 30,
             experienceLevel: '3',
           }}
@@ -60,9 +68,6 @@ export function SettingsDrawer() {
           </Form.Item>
           <Form.Item name="latestFinishTime" label="Tur ferdig innen">
             <TimePicker showNow={false} />
-          </Form.Item>
-          <Form.Item name="maxRadius" label="Maks radius (km)">
-            <Slider max={10} step={0.1} />
           </Form.Item>
           <Form.Item name="maxSlope" label="Maks helning (%)">
             <Slider max={30} />
@@ -85,4 +90,4 @@ export function SettingsDrawer() {
       </Drawer>
     </div>
   );
-}
+};
