@@ -54,6 +54,7 @@ def get_shortest_path():
                 {res.get('endLng')}, {res.get('endLat')}, 4326);"
         )
         rows = cur.fetchone()[0]
+        print(rows)
     return jsonify(rows)
 
 
