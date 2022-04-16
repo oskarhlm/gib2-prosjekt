@@ -6,7 +6,7 @@ interface IApi {
 }
 
 export default class Api implements IApi {
-  api_url = 'http://localhost:5000/api';
+  api_url = 'http://geomatikk.ibm.ntnu.no:8006/api';
 
   async fetchAttractions() {
     const res = await fetch(this.api_url + '/attractions');

@@ -1,13 +1,13 @@
 from configparser import ConfigParser
-import configparser
-from email import parser
+
+import os
 
 
 def config(filename='database.ini', section='postgresql'):
     parser = ConfigParser()
-    parser.read(filename)
+    parser.read(os.path.join(os.path.dirname(__file__), filename))
     db = {}
-
+    
     if parser.has_section(section):
         params = parser.items(section)
         for param in params:
@@ -16,3 +16,4 @@ def config(filename='database.ini', section='postgresql'):
         raise Exception()
 
     return db
+
