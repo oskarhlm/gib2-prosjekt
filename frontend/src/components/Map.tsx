@@ -13,19 +13,19 @@ import store, { RootState } from 'ducks/store';
 import { ButtonRow } from './ButtonRow';
 import { Button } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
+import { UserDestinationButton } from './UserDestination';
 
 export const Map = () => {
   const settings = useSelector((state: RootState) => state.drivingDistance);
-  const location = useSelector((state: RootState) => state.location);
+  const location = useSelector(
+    (state: RootState) => state.locations.userLocation
+  );
 
   return (
     <div>
       <ButtonRow>
         <SettingsDrawer />
-        <Button onClick={() => alert('yo mama')}>Press me</Button>
-        <Button style={{ backgroundColor: 'coral', color: 'white' }}>
-          Lagre destinasjon
-        </Button>
+        <UserDestinationButton />
       </ButtonRow>
       <MapContainer center={[63.4346, 10.3985]} zoom={13} zoomControl={false}>
         <TileLayer

@@ -1,16 +1,21 @@
 import L from 'leaflet';
 import { DrivingDistanceState } from 'ducks/drivingDistanceSlice';
+import { AttrationPoint } from 'components/AttractionMarker';
 
 interface IApi {
   api_url: string;
 }
 
 export default class Api implements IApi {
-  api_url = 'http://geomatikk.ibm.ntnu.no:8006/api';
+  // api_url = 'http://geomatikk.ibm.ntnu.no:8006/api';
+  api_url = 'http://localhost:5000/api';
 
-  async fetchAttractions() {
-    const res = await fetch(this.api_url + '/attractions');
+  async fetchAttractions(): Promise<AttrationPoint[]> {
+    const res = await fetch(
+      this.api_url + '/attractions?pointClasses=hospital,bakery'
+    );
     const data = await res.json();
+    console.log(data);
     return data;
   }
 

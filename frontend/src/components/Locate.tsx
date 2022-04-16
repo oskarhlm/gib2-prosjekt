@@ -3,12 +3,12 @@ import { Polygon, GeoJSON, useMap, Marker } from 'react-leaflet';
 import L, { icon, latLng, Popup } from 'leaflet';
 import { defaultIcon } from 'assets/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { setLocation } from 'ducks/locationSlice';
+import { setUserLocation } from 'ducks/locationsSlice';
 import { RootState } from 'ducks/store';
 
 export function Locate() {
   const map = useMap();
-  const loc = useSelector((state: RootState) => state.location);
+  const loc = useSelector((state: RootState) => state.locations.userLocation);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export function Locate() {
     // });
     const lat = 63.430515;
     const lng = 10.395053;
-    dispatch(setLocation({ lat, lng }));
+    dispatch(setUserLocation({ lat, lng }));
     L.marker([lat, lng], { icon: defaultIcon })
       .addTo(map)
       .bindPopup('Du er her');

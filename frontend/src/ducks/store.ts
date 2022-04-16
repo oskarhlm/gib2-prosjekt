@@ -1,10 +1,10 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import drivingDistanceReducer from 'ducks/drivingDistanceSlice';
-import locationReducer from 'ducks/locationSlice';
+import locationReducer from 'ducks/locationsSlice';
 
 const rootReducer = combineReducers({
   drivingDistance: drivingDistanceReducer,
-  location: locationReducer,
+  locations: locationReducer,
 });
 
 const store = configureStore({

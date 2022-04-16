@@ -26,7 +26,7 @@ export function DrivingDistancePolygon() {
     fillOpacity: 0.1,
   };
   const settings = useSelector((state: RootState) => state.drivingDistance);
-  const loc = useSelector((state: RootState) => state.location);
+  const loc = useSelector((state: RootState) => state.locations.userLocation);
   const geoJsonLayer = useRef<L.GeoJSON<any>>(null);
 
   const updatePolygon = (input: DrivingDistanceState) => {
