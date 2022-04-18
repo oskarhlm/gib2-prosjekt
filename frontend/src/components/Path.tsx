@@ -1,6 +1,6 @@
 import Api from 'helper/api';
 import { useEffect, useState } from 'react';
-import { GeoJSON, useMap, useMapEvents, Marker } from 'react-leaflet';
+import { GeoJSON, useMapEvents, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import { defaultIcon } from 'assets/icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,7 +16,6 @@ interface IPath {
 export const Path = ({ loc }: IPath) => {
   const [pathSegments, setPathSegments] = useState<PathSegment[] | null>(null);
   const api = new Api();
-  // const [destination, setDestination] = useState<L.LatLng>();
   const destination = useSelector(
     (state: RootState) => state.locations.destination
   );
@@ -25,9 +24,12 @@ export const Path = ({ loc }: IPath) => {
   useEffect(() => {
     setPathSegments(null); // pga index som key (FIX)
 
-    destination &&
+    destination.loc &&
       api
-        .fetchShortestPath(loc, new L.LatLng(destination.lat, destination.lng))
+        .fetchShortestPath(
+          loc,
+          L.latLng(destination.loc.lat, destination.loc.lng)
+        )
         .then((res) => {
           setPathSegments(res);
         });
@@ -35,8 +37,12 @@ export const Path = ({ loc }: IPath) => {
 
   const map = useMapEvents({
     click(e) {
-      // setDestination(L.latLng([e.latlng.lat, e.latlng.lng]));
-      dispatch(setDestination({ lat: e.latlng.lat, lng: e.latlng.lng }));
+      dispatch(
+        setDestination({
+          loc: { lat: e.latlng.lat, lng: e.latlng.lng },
+          isNew: true,
+        })
+      );
     },
   });
 
@@ -44,13 +50,13 @@ export const Path = ({ loc }: IPath) => {
     <>
       {pathSegments &&
         pathSegments.map((seg, index) => <GeoJSON key={index} data={seg} />)}
-      {destination && (
+      {destination.loc && (
         <Marker
-          position={destination}
+          position={L.latLng(destination.loc.lat, destination.loc.lng)}
           icon={defaultIcon}
           eventHandlers={{
             click: (e) => {
-              dispatch(setDestination(null));
+              dispatch(setDestination({ loc: null, isNew: undefined }));
             },
           }}
         />

@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { SettingsDrawer } from './SettingsDrawer';
-import { AttractionMarker } from './AttractionMarker';
+import { POIMarker } from './POIMarker';
 import { DrivingDistancePolygon } from './DrivingDistancePolygon';
 import { Path } from './Path';
 import { Locate } from './Locate';
@@ -34,7 +34,7 @@ export const Map = () => {
         />
         <ZoomControl position="topright" />
         <DrivingDistancePolygon />
-        <AttractionMarker />
+        <POIMarker />
         {location && <Path loc={L.latLng(location)} />}
         <Locate />
       </MapContainer>

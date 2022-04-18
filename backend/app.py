@@ -1,12 +1,9 @@
 from contextlib import closing
-from glob import escape
-from pydoc import resolve
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import psycopg2
 import json
 from config import config
-import os
 
 
 app = Flask(__name__, static_url_path='', static_folder='../frontend/build', template_folder='../frontend/build')
@@ -24,7 +21,9 @@ app.config['JSON_SORT_KEYS'] = False
 
 
 def get_connection():
-    return psycopg2.connect(**config())
+    connection = psycopg2.connect(**config())
+    connection.autocommit = True
+    return connection
 
 
 @app.route('/')
@@ -40,32 +39,40 @@ def hello_world():
 #     return send_from_directory(dir_name, file_name)
 
 
-# @app.route('/api/attractions')
-# def get_attractions():
-#     conn = get_connection()
-#     with closing(conn.cursor()) as cur:
-#         cur.execute(
-#             'select json_agg(st_asgeojson(points.*)::json) \
-#                 from (select pid, st_transform(geom, 4326) as geom \
-#                       from point) as points;'
-#         )
-#         rows = cur.fetchone()[0]
-#     return jsonify(rows)
-
-@app.route('/api/attractions/')
+@app.route('/api/attractions/', methods=['GET', 'POST'])
 def get_attractions():
-    point_classes = request.args.get('pointClasses').split(',')
-    print(point_classes)
-    print(f"fclass in '{tuple(point_classes)}') as points")
+    conn = get_connection()
+    if request.method == 'GET':
+        point_classes = request.args.get('pointClasses').split(',')
+        with closing(conn.cursor()) as cur:
+            cur.execute(
+                f"select json_agg(st_asgeojson(points.*)::json) \
+                    from (  select id, geom, name, fclass \
+                            from points_of_interest \
+                            where fclass in {tuple(point_classes)}) as points;"
+            )
+            rows = cur.fetchone()[0]
+        return jsonify(rows)
 
+    if request.method == 'POST':
+        res = json.loads(request.data)
+        with closing(conn.cursor()) as cur:
+            cur.execute(
+                f"insert into points_of_interest (name, fclass, geom) \
+                    values ( \
+                        '{res.get('title')}', \
+                        '{res.get('category')}', \
+                        st_pointfromtext('POINT({res.get('geography')[1]} {res.get('geography')[0]})', 4326) \
+                    );"
+            )
+        return {}
+
+
+@app.route('/api/pointOfInterestCategories')
+def get_POI_categories():
     conn = get_connection()
     with closing(conn.cursor()) as cur:
-        cur.execute(
-            f"select json_agg(st_asgeojson(points.*)::json) \
-                from (  select id, geom, name, fclass \
-                        from points_of_interest \
-                        where fclass in {tuple(point_classes)}) as points;"
-        )
+        cur.execute('select json_agg(distinct fclass) from points_of_interest;')
         rows = cur.fetchone()[0]
     return jsonify(rows)
 
@@ -90,11 +97,6 @@ def get_dd_polygon_and_points_within():
     res = json.loads(request.data)
     print(res)
     with closing(conn.cursor()) as cur:
-        # cur.execute(
-        #     'select * \
-        #     from get_polygon_and_points_within_geojson(\
-        #     (select geom from get_dd_polygon(270337.87, 7041814.2, 25833, 12)));'
-        # )
         cur.execute(
             f'select * \
             from get_polygon_and_points_within_geojson(\
@@ -104,7 +106,6 @@ def get_dd_polygon_and_points_within():
                 4326, {res.get("maxMinutes")})));'
         )
         rows = cur.fetchone()[0]
-    # print(json.dumps(rows, indent=4))
     response = jsonify(rows)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response

@@ -1,10 +1,13 @@
-import { Modal, Button, Form, Input, Select } from 'antd';
-import { useState } from 'react';
+import { Modal, Button, Form, Input, Select, Checkbox } from 'antd';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'ducks/store';
+import Api from 'helper/api';
 
 export const UserDestinationButton = () => {
+  const api = new Api();
   const [modelVisible, setModalVisible] = useState(false);
+  const [customCategory, setCustomCategory] = useState(false);
   const [form] = Form.useForm();
   const [categories, setCategories] = useState<string[]>([
     'Restaurant',
@@ -14,14 +17,30 @@ export const UserDestinationButton = () => {
   const destination = useSelector(
     (state: RootState) => state.locations.destination
   );
-  const buttonActive = destination !== null;
+  const buttonActive = destination.loc !== null && destination.isNew;
+
+  useEffect(() => {
+    api.fetchPOICategories().then((data) => {
+      setCategories(data);
+    });
+  }, []);
 
   const showModal = () => {
     setModalVisible(true);
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: {
+    title: string;
+    category: string;
+    customCategory: string;
+  }) => {
     console.log(values);
+    destination.loc &&
+      api.addPointOfInterest({
+        title: values.title,
+        category: values.category || values.customCategory,
+        geography: [destination.loc.lat, destination.loc.lng],
+      });
     setModalVisible(false);
   };
 
@@ -45,14 +64,26 @@ export const UserDestinationButton = () => {
         okText="Lagre"
         onCancel={handleCancel}
         cancelText="Avbryt"
-        transitionName=""
-        maskTransitionName=""
+        // transitionName=""
+        // maskTransitionName=""
       >
         <Form form={form} onFinish={onFinish}>
-          <Form.Item name="title" required={true}>
-            <Input placeholder="Tittel" />
+          <Form.Item
+            name="title"
+            rules={[{ required: true, message: 'Vennligst angi et stednavn' }]}
+          >
+            <Input placeholder="Stedsnavn" />
           </Form.Item>
-          <Form.Item name="category">
+          <Form.Item
+            name="category"
+            hidden={customCategory}
+            rules={[
+              {
+                required: !customCategory,
+                message: 'Vennligst spesifiser en kategori',
+              },
+            ]}
+          >
             <Select placeholder="Kategori">
               {categories.map((category) => (
                 <Select.Option key={category} value={category}>
@@ -61,8 +92,22 @@ export const UserDestinationButton = () => {
               ))}
             </Select>
           </Form.Item>
-          <Form.Item name="description">
-            <Input placeholder="Beskrivelse" />
+          <Form.Item
+            name="customCategory"
+            hidden={!customCategory}
+            rules={[
+              {
+                required: customCategory,
+                message: 'Vennligst spesifiser en kategori',
+              },
+            ]}
+          >
+            <Input placeholder="Egendefinert kategori" />
+          </Form.Item>
+          <Form.Item>
+            <Checkbox onClick={() => setCustomCategory(!customCategory)}>
+              Legg til kategori
+            </Checkbox>
           </Form.Item>
         </Form>
       </Modal>

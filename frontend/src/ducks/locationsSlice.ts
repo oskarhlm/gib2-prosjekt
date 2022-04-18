@@ -7,10 +7,13 @@ interface LocationState {
 
 interface ILocations {
   userLocation: LocationState;
-  destination: LocationState | null;
+  destination: {
+    loc: LocationState | null;
+    isNew?: boolean;
+  };
 }
 
-const initialState = { destination: null } as ILocations;
+const initialState = { destination: { loc: null } } as ILocations;
 
 const locationsSlice = createSlice({
   name: 'location',
@@ -19,7 +22,7 @@ const locationsSlice = createSlice({
     setUserLocation(state, action: PayloadAction<LocationState>) {
       state.userLocation = action.payload;
     },
-    setDestination(state, action: PayloadAction<LocationState | null>) {
+    setDestination(state, action: PayloadAction<ILocations['destination']>) {
       state.destination = action.payload;
     },
   },

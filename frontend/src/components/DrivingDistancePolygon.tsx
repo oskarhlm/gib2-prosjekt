@@ -1,5 +1,5 @@
 import { createRef, useEffect, useState, useRef, useCallback } from 'react';
-import { AttrationPoint } from './AttractionMarker';
+import { POI } from './POIMarker';
 import Api from 'helper/api';
 import { Polygon, GeoJSON, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -11,7 +11,7 @@ import drivingDistanceSlice, {
 
 type DrivingDistancePolygon = GeoJSON.Feature<
   GeoJSON.Polygon,
-  { pointsWithin: AttrationPoint[] }
+  { pointsWithin: POI[] }
 >;
 
 export function DrivingDistancePolygon() {

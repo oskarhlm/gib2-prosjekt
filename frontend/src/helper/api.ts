@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import { DrivingDistanceState } from 'ducks/drivingDistanceSlice';
-import { AttrationPoint } from 'components/AttractionMarker';
+import { POI } from 'components/POIMarker';
+import { api_url } from './apiSettings';
 
 interface IApi {
   api_url: string;
@@ -8,14 +9,36 @@ interface IApi {
 
 export default class Api implements IApi {
   // api_url = 'http://geomatikk.ibm.ntnu.no:8006/api';
-  api_url = 'http://localhost:5000/api';
+  // api_url = 'http://localhost:5000/api';
+  api_url = api_url;
 
-  async fetchAttractions(): Promise<AttrationPoint[]> {
+  async fetchPointsOfInterest(): Promise<POI[]> {
     const res = await fetch(
       this.api_url + '/attractions?pointClasses=hospital,bakery'
     );
     const data = await res.json();
-    console.log(data);
+    return data;
+  }
+
+  async addPointOfInterest(params: {
+    title: string;
+    category: string;
+    geography: [number, number];
+  }) {
+    const res = await fetch(this.api_url + '/attractions/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: `${JSON.stringify(params)}`,
+    });
+    const data = await res.json();
+    return data;
+  }
+
+  async fetchPOICategories(): Promise<string[]> {
+    const res = await fetch(this.api_url + '/pointOfInterestCategories');
+    const data = await res.json();
     return data;
   }
 
