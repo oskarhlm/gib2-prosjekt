@@ -1,11 +1,16 @@
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import {
+  LayerGroup,
+  MapContainer,
+  TileLayer,
+  ZoomControl,
+} from 'react-leaflet';
 import { SettingsDrawer } from './SettingsDrawer';
 import { POIMarker } from './POIMarker';
 import { DrivingDistancePolygon } from './DrivingDistancePolygon';
 import { Path } from './Path';
 import { Locate } from './Locate';
 import Api from 'helper/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import { useSelector } from 'react-redux';
 import { updateSettings } from 'ducks/drivingDistanceSlice';
@@ -20,6 +25,8 @@ export const Map = () => {
   const location = useSelector(
     (state: RootState) => state.locations.userLocation
   );
+  const polygonGroup = L.layerGroup();
+  const polygonRef = useRef(polygonGroup);
 
   return (
     <div>
@@ -33,8 +40,8 @@ export const Map = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomControl position="topright" />
-        <DrivingDistancePolygon />
         <POIMarker />
+        <DrivingDistancePolygon />
         {location && <Path loc={L.latLng(location)} />}
         <Locate />
       </MapContainer>

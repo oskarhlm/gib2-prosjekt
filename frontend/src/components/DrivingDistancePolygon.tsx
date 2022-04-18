@@ -4,7 +4,7 @@ import Api from 'helper/api';
 import { Polygon, GeoJSON, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useSelector } from 'react-redux';
-import store, { RootState } from 'ducks/store';
+import { RootState } from 'ducks/store';
 import drivingDistanceSlice, {
   DrivingDistanceState,
 } from 'ducks/drivingDistanceSlice';
@@ -37,6 +37,9 @@ export function DrivingDistancePolygon() {
         if (geoJsonLayer.current && polygon) {
           geoJsonLayer.current.clearLayers().addData(data);
         }
+        // if (polygonRef.current && polygon) {
+        //   polygonRef.current.clearLayers();
+        // }
       });
   };
 
@@ -52,7 +55,7 @@ export function DrivingDistancePolygon() {
 
   if (polygon) {
     const geojsonObject = L.geoJSON(polygon);
-    map.flyToBounds(geojsonObject.getBounds());
+    // map.flyToBounds(geojsonObject.getBounds());
 
     return (
       <>
