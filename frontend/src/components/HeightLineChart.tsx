@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
 import { useState } from 'react';
 
 const data = [
   //Lenght er avstand fra startpunkt, 
-  {length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},
+  {length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},
 ];
 
 export default class HeightLineChart extends PureComponent {
@@ -12,7 +12,7 @@ export default class HeightLineChart extends PureComponent {
     return (
       <div style={{
         position: 'fixed',
-        bottom: 0,
+        bottom: 24,
         right: 0,
         display: 'flex',
         zIndex: 420,
@@ -22,7 +22,7 @@ export default class HeightLineChart extends PureComponent {
       <ResponsiveContainer minWidth="500px" minHeight="300px">
         <LineChart
           width={500}
-          height={300}
+          height={200}
           data={data}
           margin={{
             top: 5,
@@ -31,12 +31,14 @@ export default class HeightLineChart extends PureComponent {
             bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={'lenght'} strokeWidth={4} fontSize={15} fontWeight={"bold"}/>
-          <YAxis strokeWidth={4} fontSize={15} fontWeight={"bold"}/>
+          <XAxis dataKey={'lenght'} strokeWidth={4} fontSize={15} fontWeight={"bold"}>
+            <Label value="Høyde [m]" fontWeight={"bold"} fontSize={"15"} position={"insideBottom"} dy={8}></Label>
+          </XAxis>
+          <YAxis strokeWidth={4} fontSize={15} fontWeight={"bold"} >
+            <Label value="Avstand fra start [m]" fontWeight={"bold"} fontSize={"15"} angle={-90} dx={-26}></Label>
+          </YAxis>
           <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="hoyde" stroke="#FF0000" strokeWidth={4} />
+          <Line type="monotone" dataKey="hoyde" stroke="#FF0000" strokeWidth={4} dot={false}/>
         </LineChart>
       </ResponsiveContainer>
       </div>
