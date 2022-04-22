@@ -1,16 +1,16 @@
 import L from 'leaflet';
 import { DrivingDistanceState } from 'ducks/drivingDistanceSlice';
 import { POI } from 'components/POIMarker';
-import { api_url } from './apiSettings';
+// import { api_url } from './apiSettings';
 
 interface IApi {
   api_url: string;
 }
 
 export default class Api implements IApi {
-  // api_url = 'http://geomatikk.ibm.ntnu.no:8006/api';
+  api_url = 'http://geomatikk.ibm.ntnu.no:8006/api';
   // api_url = 'http://localhost:5000/api';
-  api_url = api_url;
+  // api_url = api_url;
 
   async fetchPointsOfInterest(): Promise<POI[]> {
     const res = await fetch(
