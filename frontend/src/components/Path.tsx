@@ -6,6 +6,7 @@ import { defaultIcon } from 'assets/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { setDestination } from 'ducks/locationsSlice';
 import { RootState } from 'ducks/store';
+import { setPathSegments } from 'ducks/pathSlice';
 
 export type PathSegment = GeoJSON.Feature<
   GeoJSON.MultiLineString,
@@ -17,7 +18,8 @@ interface IPath {
 }
 
 export const Path = ({ loc }: IPath) => {
-  const [pathSegments, setPathSegments] = useState<PathSegment[] | null>(null);
+  // const [pathSegments, setPathSegments] = useState<PathSegment[] | null>(null);
+  const pathSegments = useSelector((state: RootState) => state.path);
   const api = new Api();
   const destination = useSelector(
     (state: RootState) => state.locations.destination
@@ -25,7 +27,7 @@ export const Path = ({ loc }: IPath) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setPathSegments(null); // pga index som key (FIX)
+    dispatch(setPathSegments([]));
 
     destination.loc &&
       api
@@ -43,7 +45,7 @@ export const Path = ({ loc }: IPath) => {
                 properties: seg.properties,
               });
           });
-          setPathSegments(newSegs);
+          dispatch(setPathSegments(newSegs));
         });
   }, [destination]);
 
@@ -62,7 +64,7 @@ export const Path = ({ loc }: IPath) => {
     <>
       {pathSegments &&
         pathSegments.map((seg, index) => {
-          return <GeoJSON key={index} data={seg} />;
+          return <GeoJSON key={seg.properties.gid} data={seg} />;
         })}
       {destination.loc && (
         <Marker
