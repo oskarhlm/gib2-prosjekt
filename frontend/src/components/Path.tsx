@@ -7,7 +7,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setDestination } from 'ducks/locationsSlice';
 import { RootState } from 'ducks/store';
 
-export type PathSegment = GeoJSON.Feature<GeoJSON.MultiLineString, null>;
+export type PathSegment = GeoJSON.Feature<
+  GeoJSON.MultiLineString,
+  { gid: string }
+>;
 
 interface IPath {
   loc: L.LatLng;
@@ -30,8 +33,17 @@ export const Path = ({ loc }: IPath) => {
           loc,
           L.latLng(destination.loc.lat, destination.loc.lng)
         )
-        .then((res) => {
-          setPathSegments(res);
+        .then((res: PathSegment[]) => {
+          let newSegs: PathSegment[] = [];
+          res.forEach((seg) => {
+            seg.geometry.type &&
+              newSegs.push({
+                type: 'Feature',
+                geometry: seg.geometry,
+                properties: seg.properties,
+              });
+          });
+          setPathSegments(newSegs);
         });
   }, [destination]);
 
@@ -49,7 +61,9 @@ export const Path = ({ loc }: IPath) => {
   return (
     <>
       {pathSegments &&
-        pathSegments.map((seg, index) => <GeoJSON key={index} data={seg} />)}
+        pathSegments.map((seg, index) => {
+          return <GeoJSON key={index} data={seg} />;
+        })}
       {destination.loc && (
         <Marker
           position={L.latLng(destination.loc.lat, destination.loc.lng)}
