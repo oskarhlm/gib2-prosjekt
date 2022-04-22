@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import { defaultIcon } from 'assets/icons';
 import L from 'leaflet';
-import { useDispatch } from 'react-redux';
 import { setDestination } from 'ducks/locationsSlice';
 import { Button } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+import { setPOI as setPoints } from 'ducks/POISlice';
+import { RootState } from 'ducks/store';
 
 export type POI = GeoJSON.Feature<
   GeoJSON.Point,
@@ -14,19 +16,20 @@ export type POI = GeoJSON.Feature<
 
 export function POIMarker() {
   const api = new Api();
-  const [points, setPoints] = useState<POI[]>([]);
+  // const [points, setPoints] = useState<POI[]>([]);
   const dispatch = useDispatch();
+  const points = useSelector((state: RootState) => state.POI);
 
   useEffect(() => {
     api.fetchPointsOfInterest().then((data) => {
-      setPoints(data);
+      dispatch(setPoints(data));
     });
   }, []);
 
   const handleFindPath = (p: POI) => {
     dispatch(
       setDestination({
-        loc: { lat: p.geometry.coordinates[0], lng: p.geometry.coordinates[1] },
+        loc: { lat: p.geometry.coordinates[1], lng: p.geometry.coordinates[0] },
         isNew: false,
       })
     );
@@ -35,12 +38,11 @@ export function POIMarker() {
   return (
     <>
       {points.map((p) => {
+        const loc = [...p.geometry.coordinates];
         return (
           <Marker
             key={p.properties.id}
-            position={L.latLng(
-              p.geometry.coordinates.reverse() as [number, number]
-            )}
+            position={L.latLng(loc.reverse() as [number, number])}
             icon={defaultIcon}
           >
             <Popup>
