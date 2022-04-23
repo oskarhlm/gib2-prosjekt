@@ -17,6 +17,69 @@ import {
   DrivingDistanceState,
 } from 'ducks/drivingDistanceSlice';
 
+export const SettingsForm = ({
+  showPolygon,
+  setShowPolygon,
+}: {
+  showPolygon: boolean;
+  setShowPolygon: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const settings = useSelector((state: RootState) => state.drivingDistance);
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values: any) => {
+    setShowPolygon(true);
+    dispatch(
+      updateSettings({
+        startPosition: [10, 63],
+        maxMinutes: moment
+          .duration(values.latestFinishTime.diff(moment()))
+          .asMinutes(),
+        maxSlope: values.maxSlope,
+        roundTrip: values.roundTrip,
+        experience: parseInt(values.experienceLevel),
+      } as DrivingDistanceState)
+    );
+  };
+
+  const handleRemovePolygon = () => {
+    setShowPolygon(false);
+  };
+
+  return (
+    <Form
+      onFinish={handleSubmit}
+      initialValues={{
+        roundTrip: false,
+        latestFinishTime: moment().add(5, 'm'),
+        maxSlope: 30,
+        experienceLevel: '3',
+      }}
+    >
+      <Form.Item name="latestFinishTime" label="Tur ferdig innen">
+        <TimePicker showNow={false} />
+      </Form.Item>
+      <Form.Item name="roundTrip" valuePropName="checked">
+        <Checkbox>Tur-retur</Checkbox>
+      </Form.Item>
+      <Form.Item wrapperCol={{ span: 30, offset: 0 }}>
+        <Button type="primary" htmlType="submit">
+          Bruk
+        </Button>
+        {showPolygon && (
+          <Button
+            style={{ marginLeft: 10 }}
+            danger
+            onClick={handleRemovePolygon}
+          >
+            Fjern turradius
+          </Button>
+        )}
+      </Form.Item>
+    </Form>
+  );
+};
+
 export const SettingsDrawer = () => {
   const [collapsed, setCollapsed] = useState(false);
   const settings = useSelector((state: RootState) => state.drivingDistance);
@@ -53,41 +116,7 @@ export const SettingsDrawer = () => {
         onClose={handleCollapsed}
         visible={collapsed}
         key={1}
-      >
-        <Form
-          onFinish={handleSubmit}
-          initialValues={{
-            roundTrip: false,
-            latestFinishTime: moment().add(5, 'm'),
-            maxSlope: 30,
-            experienceLevel: '3',
-          }}
-        >
-          <Form.Item name="roundTrip" valuePropName="checked">
-            <Checkbox>Tur/retur</Checkbox>
-          </Form.Item>
-          <Form.Item name="latestFinishTime" label="Tur ferdig innen">
-            <TimePicker showNow={false} />
-          </Form.Item>
-          <Form.Item name="maxSlope" label="Maks helning (%)">
-            <Slider max={30} />
-          </Form.Item>
-          <Form.Item name="experienceLevel" label="Erfaringsnivå">
-            <Radio.Group>
-              <Radio.Button value="1">1</Radio.Button>
-              <Radio.Button value="2">2</Radio.Button>
-              <Radio.Button value="3">3</Radio.Button>
-              <Radio.Button value="4">4</Radio.Button>
-              <Radio.Button value="5">5</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item wrapperCol={{ span: 12, offset: 0 }}>
-            <Button type="primary" htmlType="submit">
-              Bruk
-            </Button>
-          </Form.Item>
-        </Form>
-      </Drawer>
+      ></Drawer>
     </div>
   );
 };

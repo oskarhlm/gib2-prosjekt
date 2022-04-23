@@ -16,7 +16,6 @@ export type POI = GeoJSON.Feature<
 
 export function POIMarker() {
   const api = new Api();
-  // const [points, setPoints] = useState<POI[]>([]);
   const dispatch = useDispatch();
   const points = useSelector((state: RootState) => state.POI);
 

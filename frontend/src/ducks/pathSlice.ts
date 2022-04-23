@@ -7,7 +7,7 @@ const pathSlice = createSlice({
   name: 'path',
   initialState,
   reducers: {
-    setPathSegments(state, action: PayloadAction<PathSegment[]>) {
+    setPathSegments(_, action: PayloadAction<PathSegment[]>) {
       return action.payload;
     },
   },

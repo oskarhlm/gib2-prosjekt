@@ -14,11 +14,15 @@ type DrivingDistancePolygon = GeoJSON.Feature<
   { pointsWithin: POI[] }
 >;
 
-export function DrivingDistancePolygon() {
+export function DrivingDistancePolygon({
+  showPolygon,
+  setShowPolygon,
+}: {
+  showPolygon: boolean;
+  setShowPolygon: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const api = new Api();
   const [polygon, setPolygon] = useState<DrivingDistancePolygon>();
-  const pointsWithin = polygon?.properties.pointsWithin;
-  const map = useMap();
   const polygonOptions = {
     color: 'purple',
     opacity: 0.8,
@@ -30,6 +34,7 @@ export function DrivingDistancePolygon() {
   const geoJsonLayer = useRef<L.GeoJSON<any>>(null);
 
   const updatePolygon = (input: DrivingDistanceState) => {
+    setShowPolygon(false);
     api
       .fetchDrivingDistancePolygon(input)
       .then((data: DrivingDistancePolygon) => {
@@ -37,26 +42,22 @@ export function DrivingDistancePolygon() {
         if (geoJsonLayer.current && polygon) {
           geoJsonLayer.current.clearLayers().addData(data);
         }
-        // if (polygonRef.current && polygon) {
-        //   polygonRef.current.clearLayers();
-        // }
+        setShowPolygon(true);
       });
   };
 
   useEffect(() => {
-    if (settings) {
+    setPolygon(undefined);
+    if (settings && showPolygon) {
       const input: typeof settings = {
         ...settings,
         startPosition: [loc.lng, loc.lat],
       };
       updatePolygon(input);
     }
-  }, [settings]);
+  }, [settings, loc]);
 
-  if (polygon) {
-    const geojsonObject = L.geoJSON(polygon);
-    // map.flyToBounds(geojsonObject.getBounds());
-
+  if (polygon && showPolygon) {
     return (
       <>
         <GeoJSON
@@ -64,22 +65,9 @@ export function DrivingDistancePolygon() {
           pathOptions={polygonOptions}
           ref={geoJsonLayer}
         />
-        {/* {pointsWithin && pointsWithin.map((point) => <GeoJSON data={point} />)} */}
       </>
     );
   } else {
     return null;
   }
-
-  // return (
-  //   <>
-  //     {polygon && (
-  //       <GeoJSON
-  //         data={polygon}
-  //         pathOptions={purpleOptions}
-  //         ref={geoJsonLayer}
-  //       />
-  //     )}
-  //   </>
-  // );
 }

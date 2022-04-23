@@ -10,7 +10,7 @@ import { setPathSegments } from 'ducks/pathSlice';
 
 export type PathSegment = GeoJSON.Feature<
   GeoJSON.MultiLineString,
-  { gid: string }
+  { gid: string; from_z: number; to_z: number; seg_length: number }
 >;
 
 interface IPath {
@@ -21,19 +21,17 @@ export const Path = ({ loc }: IPath) => {
   // const [pathSegments, setPathSegments] = useState<PathSegment[] | null>(null);
   const pathSegments = useSelector((state: RootState) => state.path);
   const api = new Api();
-  const destination = useSelector(
-    (state: RootState) => state.locations.destination
-  );
+  const locations = useSelector((state: RootState) => state.locations);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const updatePath = () => {
     dispatch(setPathSegments([]));
 
-    destination.loc &&
+    locations.destination.loc &&
       api
         .fetchShortestPath(
           loc,
-          L.latLng(destination.loc.lat, destination.loc.lng)
+          L.latLng(locations.destination.loc.lat, locations.destination.loc.lng)
         )
         .then((res: PathSegment[]) => {
           let newSegs: PathSegment[] = [];
@@ -47,7 +45,11 @@ export const Path = ({ loc }: IPath) => {
           });
           dispatch(setPathSegments(newSegs));
         });
-  }, [destination]);
+  };
+
+  useEffect(() => {
+    updatePath();
+  }, [locations]);
 
   const map = useMapEvents({
     click(e) {
@@ -66,13 +68,30 @@ export const Path = ({ loc }: IPath) => {
         pathSegments.map((seg, index) => {
           return <GeoJSON key={seg.properties.gid} data={seg} />;
         })}
-      {destination.loc && (
+      {locations.destination.loc && (
         <Marker
-          position={L.latLng(destination.loc.lat, destination.loc.lng)}
+          position={L.latLng(
+            locations.destination.loc.lat,
+            locations.destination.loc.lng
+          )}
           icon={defaultIcon}
+          draggable={true}
           eventHandlers={{
             click: (e) => {
               dispatch(setDestination({ loc: null, isNew: undefined }));
+            },
+            dragend: (e) => {
+              const marker = e.target;
+              const position = marker.getLatLng();
+              marker.setLatLng(new L.LatLng(position.lat, position.lng), {
+                draggable: 'true',
+              });
+              dispatch(
+                setDestination({
+                  loc: { lat: position.lat, lng: position.lng },
+                  isNew: true,
+                })
+              );
             },
           }}
         />

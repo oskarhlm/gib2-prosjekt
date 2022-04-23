@@ -1,47 +1,111 @@
-import React, { PureComponent } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
-import { useState } from 'react';
+import React, { PureComponent, useEffect, useState } from 'react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Label,
+} from 'recharts';
+import { RootState } from 'ducks/store';
+import { useSelector } from 'react-redux';
 
-const data = [
-  //Lenght er avstand fra startpunkt, 
-  {length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},{length: 2,hoyde: 2400},{lenght: 2,hoyde: 1398},{lenght: 2,hoyde: 9800},{lenght: 2,hoyde: 3908},{lenght: 2,hoyde: 4800},{lenght: 2,hoyde: 2390},{lenght: 2,hoyde: 4300},
-];
+type GraphData = {
+  length: number;
+  hoyde: number;
+};
 
-export default class HeightLineChart extends PureComponent {
-  render() {
-    return (
-      <div style={{
-        position: 'fixed',
-        bottom: 24,
-        right: 0,
-        display: 'flex',
-        zIndex: 420,
-        opacity: 0.8,
-        backgroundColor: 'none'
-        }}>
-      <ResponsiveContainer minWidth="500px" minHeight="300px">
-        <LineChart
-          width={500}
-          height={200}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 5,
-            bottom: 5,
+const HeightLineChart = () => {
+  const pathSegments = useSelector((state: RootState) => state.path);
+  const [data, setData] = useState<GraphData[]>([]);
+
+  useEffect(() => {
+    let newData: GraphData[] = [];
+    let currLength = 0;
+    pathSegments.forEach((seg) => {
+      currLength += seg.properties.seg_length / 1000;
+      newData.push({
+        hoyde: Math.round(seg.properties.from_z * 100) / 100,
+        length: currLength,
+      });
+    });
+    setData(newData);
+  }, [pathSegments]);
+
+  return (
+    <>
+      {data.length > 0 && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 24,
+            right: 24,
+            display: 'flex',
+            zIndex: 420,
+            opacity: 0.8,
+            backgroundColor: 'rgba(249, 249, 249, 0.712)',
+            paddingTop: 20,
+            borderRadius: 20,
           }}
         >
-          <XAxis dataKey={'lenght'} strokeWidth={4} fontSize={15} fontWeight={"bold"}>
-            <Label value="Høyde [m]" fontWeight={"bold"} fontSize={"15"} position={"insideBottom"} dy={8}></Label>
-          </XAxis>
-          <YAxis strokeWidth={4} fontSize={15} fontWeight={"bold"} >
-            <Label value="Avstand fra start [m]" fontWeight={"bold"} fontSize={"15"} angle={-90} dx={-26}></Label>
-          </YAxis>
-          <Tooltip />
-          <Line type="monotone" dataKey="hoyde" stroke="#FF0000" strokeWidth={4} dot={false}/>
-        </LineChart>
-      </ResponsiveContainer>
-      </div>
-    );
-  }
-}
+          <ResponsiveContainer minWidth="500px" minHeight="300px">
+            <LineChart
+              width={500}
+              height={200}
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 5,
+                bottom: 5,
+              }}
+            >
+              <XAxis
+                dataKey={'lenght'}
+                strokeWidth={4}
+                fontSize={15}
+                fontWeight={'bold'}
+                tickLine={false}
+              >
+                <Label
+                  // value="Avstand fra start [m]"
+                  fontWeight={'bold'}
+                  fontSize={'15'}
+                  position={'insideBottom'}
+                  dy={8}
+                ></Label>
+              </XAxis>
+              <YAxis
+                strokeWidth={4}
+                fontSize={15}
+                fontWeight={'bold'}
+                domain={[0, (dataMax: number) => Math.max(100, dataMax)]}
+              >
+                <Label
+                  value="Høyde [moh]"
+                  fontWeight={'bold'}
+                  fontSize={'15'}
+                  angle={-90}
+                  dx={-15}
+                ></Label>
+              </YAxis>
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="hoyde"
+                stroke="#FF0000"
+                strokeWidth={4}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default HeightLineChart;

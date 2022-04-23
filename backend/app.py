@@ -31,14 +31,6 @@ def hello_world():
     return send_from_directory(app.static_folder, 'index.html')
 
 
-# @app.route("/<path:path>")
-# def static_proxy(path):
-#     """static folder serve"""
-#     file_name = path.split("/")[-1]
-#     dir_name = os.path.join(app.static_folder, "/".join(path.split("/")[:-1]))
-#     return send_from_directory(dir_name, file_name)
-
-
 @app.route('/api/attractions/', methods=['GET', 'POST'])
 def get_attractions():
     conn = get_connection()
@@ -103,7 +95,7 @@ def get_dd_polygon_and_points_within():
             (select geom from get_dd_polygon( \
                 {res.get("startPosition")[0]}, \
                 {res.get("startPosition")[1]}, \
-                4326, {res.get("maxMinutes")})));'
+                4326, {res.get("maxMinutes")}, {res.get("roundTrip")})));'
         )
         rows = cur.fetchone()[0]
     response = jsonify(rows)

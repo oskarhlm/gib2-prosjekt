@@ -7,7 +7,7 @@ const POISlice = createSlice({
   name: 'pointsOfInterest',
   initialState,
   reducers: {
-    setPOI(state, action: PayloadAction<POI[]>) {
+    setPOI(_, action: PayloadAction<POI[]>) {
       return action.payload;
     },
   },

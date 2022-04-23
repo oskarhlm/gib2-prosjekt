@@ -4,7 +4,7 @@ import {
   TileLayer,
   ZoomControl,
 } from 'react-leaflet';
-import { SettingsDrawer } from './SettingsDrawer';
+import { SettingsDrawer, SettingsForm } from './SettingsDrawer';
 import { POIMarker } from './POIMarker';
 import { DrivingDistancePolygon } from './DrivingDistancePolygon';
 import { Path } from './Path';
@@ -26,15 +26,43 @@ export const Map = () => {
   const location = useSelector(
     (state: RootState) => state.locations.userLocation
   );
-  const polygonGroup = L.layerGroup();
-  const polygonRef = useRef(polygonGroup);
+  const [showPolygon, setShowPolygon] = useState(false);
 
   return (
     <div>
-      <ButtonRow>
-        <SettingsDrawer />
-        <UserDestinationButton />
-      </ButtonRow>
+      <div
+        style={{
+          width: 'auto',
+          height: 'auto',
+          zIndex: 1000,
+          position: 'absolute',
+          padding: 10,
+          margin: 10,
+        }}
+      >
+        <div style={{ height: 60, width: 'auto' }}>
+          <ButtonRow>
+            {/* <SettingsDrawer /> */}
+            <UserDestinationButton />
+          </ButtonRow>
+        </div>
+        <div
+          style={{
+            backgroundColor: 'white',
+            height: 'auto',
+            width: 300,
+            paddingInline: 20,
+            paddingTop: 20,
+            paddingBottom: 5,
+            borderRadius: 20,
+          }}
+        >
+          <SettingsForm
+            showPolygon={showPolygon}
+            setShowPolygon={setShowPolygon}
+          />
+        </div>
+      </div>
       <MapContainer center={[63.4346, 10.3985]} zoom={13} zoomControl={false}>
         <HeightLineChart />
         <TileLayer
@@ -43,7 +71,10 @@ export const Map = () => {
         />
         <ZoomControl position="topright" />
         <POIMarker />
-        <DrivingDistancePolygon />
+        <DrivingDistancePolygon
+          showPolygon={showPolygon}
+          setShowPolygon={setShowPolygon}
+        />
         {location && <Path loc={L.latLng(location)} />}
         <Locate />
       </MapContainer>
