@@ -17,7 +17,17 @@ import {
   DrivingDistanceState,
 } from 'ducks/drivingDistanceSlice';
 
-export const SettingsDrawer = () => {
+import Api from 'helper/api';
+import { useEffect} from 'react';
+import { Marker, Popup } from 'react-leaflet';
+import { defaultIcon } from 'assets/icons';
+import L from 'leaflet';
+import { setDestination } from 'ducks/locationsSlice';
+import { setPOI as setPoints } from 'ducks/POISlice';
+
+
+export const SettingsDrawer2 = () => {
+    const api = new Api();
   const [collapsed, setCollapsed] = useState(false);
   const settings = useSelector((state: RootState) => state.drivingDistance);
   const dispatch = useDispatch();
@@ -25,6 +35,14 @@ export const SettingsDrawer = () => {
   const handleCollapsed = () => {
     setCollapsed(!collapsed);
   };
+
+  useEffect(() => {
+    api.fetchPointsOfInterest().then((data) => {
+      dispatch(setPoints(data));
+    });
+  }, []);
+  const kategorier=api.fetchPOICategories();
+
 
   const handleSubmit = (values: any) => {
     dispatch(
@@ -47,13 +65,15 @@ export const SettingsDrawer = () => {
         <MenuOutlined />
       </Button>
       <Drawer
-        title="Innstillinger for tur"
+        title="Kategorier"
         placement={'left'}
         closable={true}
         onClose={handleCollapsed}
         visible={collapsed}
         key={1}
       >
+          
+
         <Form
           onFinish={handleSubmit}
           initialValues={{
@@ -72,18 +92,9 @@ export const SettingsDrawer = () => {
           <Form.Item name="maxSlope" label="Maks helning (%)">
             <Slider max={30} />
           </Form.Item>
-          <Form.Item name="experienceLevel" label="Erfaringsnivå">
-            <Radio.Group>
-              <Radio.Button value="1">1</Radio.Button>
-              <Radio.Button value="2">2</Radio.Button>
-              <Radio.Button value="3">3</Radio.Button>
-              <Radio.Button value="4">4</Radio.Button>
-              <Radio.Button value="5">5</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
           <Form.Item wrapperCol={{ span: 12, offset: 0 }}>
             <Button type="primary" htmlType="submit">
-              Bruk
+                {api.fetchPointsOfInterest()}
             </Button>
           </Form.Item>
         </Form>

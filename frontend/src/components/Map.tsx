@@ -16,9 +16,14 @@ import { useSelector } from 'react-redux';
 import { updateSettings } from 'ducks/drivingDistanceSlice';
 import store, { RootState } from 'ducks/store';
 import { ButtonRow } from './ButtonRow';
-import { Button } from 'antd';
+import { Button, Form, Layout } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import { UserDestinationButton } from './UserDestination';
+import { UserDestinationButton2 } from './UserDestination2';
+import { SettingsDrawer2 } from './SettingsDrawer2';
+
+
+const { Header, Footer, Sider, Content } = Layout;
 
 export const Map = () => {
   const settings = useSelector((state: RootState) => state.drivingDistance);
@@ -30,9 +35,15 @@ export const Map = () => {
 
   return (
     <div>
+      
+    <Layout>
+
+      <Content>
       <ButtonRow>
         <SettingsDrawer />
+        <SettingsDrawer2 />
         <UserDestinationButton />
+        <UserDestinationButton2 />
       </ButtonRow>
       <MapContainer center={[63.4346, 10.3985]} zoom={13} zoomControl={false}>
         <TileLayer
@@ -45,6 +56,19 @@ export const Map = () => {
         {location && <Path loc={L.latLng(location)} />}
         <Locate />
       </MapContainer>
+      
+      <Form
+          initialValues={{
+            roundTrip: false,
+            maxSlope: 30,
+            experienceLevel: '3',
+          }}
+          >
+      </Form>
+
+      </Content>
+
+    </Layout>
     </div>
   );
 };

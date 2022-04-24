@@ -12,9 +12,18 @@ export default class Api implements IApi {
   // api_url = 'http://localhost:5000/api';
   api_url = api_url;
 
-  async fetchPointsOfInterest(): Promise<POI[]> {
+  //liste er classes
+  async fetchPointsOfInterest(liste): Promise<POI[]> {
+    var text= "/attractions?pointClasses="
+    for (let i = 0, len = liste.length; i < len; i++) {
+      text += String(liste[i]);
+      text +=',';
+    }
+    text -=',';
+    console.log("asdf"+text);
+//this.api_url + '/attractions?pointClasses=hospital,bakery'
     const res = await fetch(
-      this.api_url + '/attractions?pointClasses=hospital,bakery'
+      this.api_url + text
     );
     const data = await res.json();
     return data;
@@ -41,6 +50,7 @@ export default class Api implements IApi {
     const data = await res.json();
     return data;
   }
+  // change POICategories
 
   async fetchDrivingDistancePolygon(settings: DrivingDistanceState) {
     const res = await fetch(this.api_url + '/driving-distance', {

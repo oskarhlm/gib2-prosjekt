@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Polygon, GeoJSON, useMap, Marker } from 'react-leaflet';
 import L, { icon, latLng, Popup } from 'leaflet';
-import { defaultIcon } from 'assets/icons';
+import { defaultIcon,startPositionIcon } from 'assets/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserLocation } from 'ducks/locationsSlice';
 import { RootState } from 'ducks/store';
@@ -24,7 +24,7 @@ export function Locate() {
     const lat = 63.430515;
     const lng = 10.395053;
     dispatch(setUserLocation({ lat, lng }));
-    L.marker([lat, lng], { icon: defaultIcon })
+    L.marker([lat, lng], { icon: startPositionIcon })
       .addTo(map)
       .bindPopup('Du er her');
   }, []);

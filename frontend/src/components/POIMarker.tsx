@@ -21,7 +21,7 @@ export function POIMarker() {
   const points = useSelector((state: RootState) => state.POI);
 
   useEffect(() => {
-    api.fetchPointsOfInterest().then((data) => {
+    api.fetchPointsOfInterest([]).then((data) => {
       dispatch(setPoints(data));
     });
   }, []);
