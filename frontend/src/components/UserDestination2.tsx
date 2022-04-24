@@ -27,8 +27,6 @@ export const UserDestinationButton2 = () => {
   );
   const buttonActive = destination.loc !== null && destination.isNew;
 
-  
-
   useEffect(() => {
     api.fetchPOICategories(dataene).then((data) => {
       setCategories(data);

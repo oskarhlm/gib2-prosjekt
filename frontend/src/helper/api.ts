@@ -13,13 +13,14 @@ export default class Api implements IApi {
   api_url = api_url;
 
   //liste er classes
-  async fetchPointsOfInterest(liste): Promise<POI[]> {
+  async fetchPointsOfInterest(liste: any): Promise<POI[]> {
     var text= "/attractions?pointClasses="
     for (let i = 0, len = liste.length; i < len; i++) {
       text += String(liste[i]);
       text +=',';
     }
-    text -=',';
+    text=String(text);
+    text=text.substring(0,text.length-1);
     console.log("asdf"+text);
 //this.api_url + '/attractions?pointClasses=hospital,bakery'
     const res = await fetch(
