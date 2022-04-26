@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Polygon, GeoJSON, useMap, Marker } from 'react-leaflet';
-import L, { icon, latLng, Popup } from 'leaflet';
-import { defaultIcon, userIcon } from 'assets/icons';
+import { useMap } from 'react-leaflet';
+import L from 'leaflet';
+import { userIcon } from 'assets/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserLocation } from 'ducks/locationsSlice';
 import { RootState } from 'ducks/store';

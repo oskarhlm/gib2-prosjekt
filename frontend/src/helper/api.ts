@@ -1,5 +1,5 @@
 import L from 'leaflet';
-import { DrivingDistanceState } from 'ducks/drivingDistanceSlice';
+import { PolygonState } from 'ducks/polygonSlice';
 import { POI } from 'components/POIMarker';
 import { api_url } from './apiSettings';
 
@@ -42,7 +42,7 @@ export default class Api implements IApi {
     return data;
   }
 
-  async fetchDrivingDistancePolygon(settings: DrivingDistanceState) {
+  async fetchDrivingDistancePolygon(settings: PolygonState['settings']) {
     const res = await fetch(this.api_url + '/driving-distance', {
       method: 'POST',
       headers: {

@@ -1,11 +1,11 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import drivingDistanceReducer from 'ducks/drivingDistanceSlice';
+import drivingDistanceReducer from 'ducks/polygonSlice';
 import locationReducer from 'ducks/locationsSlice';
 import POIReducer from 'ducks/POISlice';
 import pathReducer from 'ducks/pathSlice';
 
 const rootReducer = combineReducers({
-  drivingDistance: drivingDistanceReducer,
+  polygon: drivingDistanceReducer,
   locations: locationReducer,
   POI: POIReducer,
   path: pathReducer,

@@ -18,7 +18,6 @@ interface IPath {
 }
 
 export const Path = ({ loc }: IPath) => {
-  // const [pathSegments, setPathSegments] = useState<PathSegment[] | null>(null);
   const pathSegments = useSelector((state: RootState) => state.path);
   const api = new Api();
   const locations = useSelector((state: RootState) => state.locations);
