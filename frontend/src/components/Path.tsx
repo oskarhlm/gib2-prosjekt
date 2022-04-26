@@ -10,7 +10,13 @@ import { setPathSegments } from 'ducks/pathSlice';
 
 export type PathSegment = GeoJSON.Feature<
   GeoJSON.MultiLineString,
-  { gid: string; from_z: number; to_z: number; seg_length: number }
+  {
+    gid: string;
+    from_z: number;
+    to_z: number;
+    seg_length: number;
+    agg_cost: number;
+  }
 >;
 
 interface IPath {

@@ -21,18 +21,23 @@ type GraphData = {
 const HeightLineChart = () => {
   const pathSegments = useSelector((state: RootState) => state.path);
   const [data, setData] = useState<GraphData[]>([]);
+  const [travelTime, setTravelTime] = useState<number>();
 
   useEffect(() => {
     let newData: GraphData[] = [];
     let currLength = 0;
+    let currCost = 0;
     pathSegments.forEach((seg) => {
       currLength += seg.properties.seg_length / 1000;
       newData.push({
         hoyde: Math.round(seg.properties.from_z * 100) / 100,
         length: currLength,
       });
+      currCost = seg.properties.agg_cost;
     });
     setData(newData);
+    setTravelTime(currCost);
+    // setTravelTime(pathSegments[pathSegments.length - 2].properties.agg_cost);
   }, [pathSegments]);
 
   return (
@@ -43,7 +48,7 @@ const HeightLineChart = () => {
             position: 'fixed',
             bottom: 24,
             right: 24,
-            display: 'flex',
+            // display: 'flex',
             zIndex: 420,
             opacity: 0.8,
             backgroundColor: 'rgba(249, 249, 249, 0.712)',
@@ -60,7 +65,7 @@ const HeightLineChart = () => {
                 top: 5,
                 right: 30,
                 left: 5,
-                bottom: 5,
+                bottom: 0,
               }}
             >
               <XAxis
@@ -102,6 +107,17 @@ const HeightLineChart = () => {
               />
             </LineChart>
           </ResponsiveContainer>
+          {travelTime && (
+            <h2
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                paddingBottom: 5,
+              }}
+            >
+              Anslått reisetid: {Math.round(travelTime)} minutter
+            </h2>
+          )}
         </div>
       )}
     </>
