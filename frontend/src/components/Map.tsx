@@ -20,7 +20,7 @@ import { Button, Form, Layout } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import { UserDestinationButton } from './UserDestination';
 import { UserDestinationButton2 } from './Kategorier2';
-import { SettingsDrawer2 } from './SettingsDrawer2';
+
 
 
 const { Header, Footer, Sider, Content } = Layout;

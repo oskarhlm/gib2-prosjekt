@@ -30,8 +30,6 @@ export const UserDestinationButton2 = () => {
   );
   const buttonActive = destination.loc !== null && destination.isNew;
 
-  var antallKategorier=0;
-
   useEffect(() => {//tar inn dataene
     api.fetchPOICategories().then((data) => {
       setCategories(data);
@@ -43,12 +41,13 @@ export const UserDestinationButton2 = () => {
   };
   const iconlist=[blueMarker,goldMarker,greenMarker,orangeMarker,yellowMarker,violetMarker]
   //var dict={value1=[],value2=[],value3=[],value4=[],value5=[],value6=[]}
-  var dict: string[][]=[[],[],[],[],[],[]]
+  var dict: string[][]=[[],[],[],[],[],[]]//dette brukes til å holde styr på om vi allerede har en farge for de ulike kategoriene. Hvis vi f.eks har 3 elementer i dict, får disse farger iconList[1],iconList[2],iconList[3].
+  //regner med dict heller bør være en del av state. 
   const onFinish = (values: {
     categories: string[]
   }) => {
     console.log(values.categories.slice(0,7));
-    api.fetchPointsOfInterest(categories.slice(0, 7)).then((data) => {
+    api.fetchPointsOfInterest(categories.slice(0, 7)).then((data) => {//gir alle de første 6 markers en icon fra iconList
       console.log(data.length)
       for (let i = 0; i < data.length; i++){
         console.log("11111111")
@@ -57,7 +56,7 @@ export const UserDestinationButton2 = () => {
           console.log("2222222222")
           if (continuing===1){
             if (!(dict[j])){
-              data[i].properties.icon =iconlist[i]
+              data[i].properties.icon =iconlist[i]//usikker på denne.
               dict[j].push("1")
               continuing=0
             }
@@ -72,28 +71,6 @@ export const UserDestinationButton2 = () => {
 
   const handleCancel = () => {
     setModalVisible(false);
-  };
-  const handleCollapsed = () => {
-  };
-  const handleChange = () => {
-  };
-
-  const handleSelect=()=>{
-    if(antallKategorier<6){
-        antallKategorier+=1;
-    }
-    else{
-        console.log(`antall kategorier er ${antallKategorier}`);
-    }
-
-    //
-    //console.log(`selected ${value}`);
-    //debugger
-    //if(value.length > 2){
-    //  this.setState({value: value.slice(0,3)});
-    //}else{
-    //  this.setState({value: value});
-    //}
   };
 
   return (
@@ -112,6 +89,7 @@ export const UserDestinationButton2 = () => {
         okText="Lagre"
         onCancel={handleCancel}
         cancelText="Avbryt"
+        //kommentarer under: ikke i bruk
         // transitionName=""
         // maskTransitionName=""
         //onSelect={handleSelect()}
@@ -124,14 +102,13 @@ export const UserDestinationButton2 = () => {
           <Form.Item
             name="categories"
           >
-            <Select mode="multiple"> 
+            <Select mode="multiple" maxTagCount={6} maxTagPlaceholder={"For mange kategorier valgt!"}> 
             {categories.map((category) => (
                 <Select.Option key={category} value={category} >
                   {category}
                 </Select.Option>
               ))}
             </Select>
-
           </Form.Item>
         </Form>
       </Modal>
