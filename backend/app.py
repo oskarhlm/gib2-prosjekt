@@ -6,18 +6,25 @@ import json
 from config import config
 
 
-app = Flask(__name__, static_url_path='', static_folder='../frontend/build', template_folder='../frontend/build')
+app = Flask(
+    __name__,
+    static_url_path="",
+    static_folder="../frontend/build",
+    template_folder="../frontend/build",
+)
 CORS(app, support_credentials=True)
 
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    response.headers.add(
+        "Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS"
+    )
     return response
 
 
-app.config['JSON_SORT_KEYS'] = False
+app.config["JSON_SORT_KEYS"] = False
 
 
 def get_connection():
@@ -26,9 +33,9 @@ def get_connection():
     return connection
 
 
-@app.route('/')
+@app.route("/")
 def hello_world():
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(app.static_folder, "index.html")
 
 
 # @app.route("/<path:path>")
@@ -39,11 +46,11 @@ def hello_world():
 #     return send_from_directory(dir_name, file_name)
 
 
-@app.route('/api/attractions/', methods=['GET', 'POST'])
+@app.route("/api/attractions/", methods=["GET", "POST"])
 def get_attractions():
     conn = get_connection()
-    if request.method == 'GET':
-        point_classes = request.args.get('pointClasses').split(',')
+    if request.method == "GET":
+        point_classes = request.args.get("pointClasses").split(",")
         with closing(conn.cursor()) as cur:
             cur.execute(
                 f"select json_agg(st_asgeojson(points.*)::json) \
@@ -54,7 +61,7 @@ def get_attractions():
             rows = cur.fetchone()[0]
         return jsonify(rows)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         res = json.loads(request.data)
         with closing(conn.cursor()) as cur:
             cur.execute(
@@ -68,16 +75,16 @@ def get_attractions():
         return {}
 
 
-@app.route('/api/pointOfInterestCategories')
+@app.route("/api/pointOfInterestCategories")
 def get_POI_categories():
     conn = get_connection()
     with closing(conn.cursor()) as cur:
-        cur.execute('select json_agg(distinct fclass) from points_of_interest;')
+        cur.execute("select json_agg(distinct fclass) from points_of_interest;")
         rows = cur.fetchone()[0]
     return jsonify(rows)
 
 
-@app.route('/api/path', methods=['GET', 'POST'])
+@app.route("/api/path", methods=["GET", "POST"])
 def get_shortest_path():
     conn = get_connection()
     res = json.loads(request.data)
@@ -91,7 +98,7 @@ def get_shortest_path():
     return jsonify(rows)
 
 
-@app.route('/api/driving-distance', methods=['POST'])
+@app.route("/api/driving-distance", methods=["POST"])
 def get_dd_polygon_and_points_within():
     conn = get_connection()
     res = json.loads(request.data)
@@ -107,9 +114,9 @@ def get_dd_polygon_and_points_within():
         )
         rows = cur.fetchone()[0]
     response = jsonify(rows)
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

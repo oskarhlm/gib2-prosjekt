@@ -15,18 +15,30 @@ export default class Api implements IApi {
   //liste er classes
   async fetchPointsOfInterest(liste: any): Promise<POI[]> {
     var text= "/attractions?pointClasses="
-    for (let i = 0, len = liste.length; i < len; i++) {
-      text += String(liste[i]);
-      text +=',';
+    
+    /*
+    //hent alle kategorinavnene fra databasen
+    if(liste==[]){
+      for (let i = 0, len = allekategoriene.length; i < len; i++){
+        text+=allekategoriene[i]
+      }
     }
-    text=String(text);
-    text=text.substring(0,text.length-1);
+    */
+    //else{
+      for (let i = 0, len = liste.length; i < len; i++) {
+        text += String(liste[i]);
+        text +=',';
+      }
+      text=String(text);
+      text=text.substring(0,text.length-1);// fjerner siste komma
+      //}
     console.log("asdf"+text);
 //this.api_url + '/attractions?pointClasses=hospital,bakery'
     const res = await fetch(
       this.api_url + text
     );
     const data = await res.json();
+    console.log("qwqwqwqwqwqwqwqwqwqw")// Denne vises ikke
     return data;
   }
 

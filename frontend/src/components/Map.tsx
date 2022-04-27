@@ -19,7 +19,7 @@ import { ButtonRow } from './ButtonRow';
 import { Button, Form, Layout } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import { UserDestinationButton } from './UserDestination';
-import { UserDestinationButton2 } from './UserDestination2';
+import { UserDestinationButton2 } from './Kategorier2';
 import { SettingsDrawer2 } from './SettingsDrawer2';
 
 
@@ -41,7 +41,7 @@ export const Map = () => {
       <Content>
       <ButtonRow>
         <SettingsDrawer />
-        <SettingsDrawer2 />
+        {/*<SettingsDrawer2 />*/}
         <UserDestinationButton />
         <UserDestinationButton2 />
       </ButtonRow>

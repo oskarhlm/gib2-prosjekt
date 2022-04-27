@@ -37,7 +37,7 @@ export const SettingsDrawer2 = () => {
   };
 
   useEffect(() => {
-    api.fetchPointsOfInterest().then((data) => {
+    api.fetchPointsOfInterest([]).then((data) => {
       dispatch(setPoints(data));
     });
   }, []);
@@ -94,7 +94,7 @@ export const SettingsDrawer2 = () => {
           </Form.Item>
           <Form.Item wrapperCol={{ span: 12, offset: 0 }}>
             <Button type="primary" htmlType="submit">
-                {api.fetchPointsOfInterest()}
+                {api.fetchPointsOfInterest([])}
             </Button>
           </Form.Item>
         </Form>

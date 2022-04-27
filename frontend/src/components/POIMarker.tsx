@@ -11,7 +11,7 @@ import { RootState } from 'ducks/store';
 
 export type POI = GeoJSON.Feature<
   GeoJSON.Point,
-  { id: number; name: string; fclass: string }
+  { id: number; name: string; fclass: string, icon?: L.Icon }//icon?
 >;
 
 export function POIMarker() {
