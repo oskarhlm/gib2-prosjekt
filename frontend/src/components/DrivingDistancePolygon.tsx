@@ -31,7 +31,6 @@ export function DrivingDistancePolygon() {
         geoJsonLayer.current.clearLayers().addData(data);
       }
       dispatch(setShowPolygon(true));
-      console.log(polygonState.polygon);
     });
   };
 
@@ -47,7 +46,6 @@ export function DrivingDistancePolygon() {
   }, [settings, loc]);
 
   if (polygonState.polygon && polygonState.showPolygon) {
-    console.log('hei');
     return (
       <>
         <GeoJSON

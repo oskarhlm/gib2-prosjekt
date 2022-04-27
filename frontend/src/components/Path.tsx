@@ -70,9 +70,9 @@ export const Path = ({ loc }: IPath) => {
   return (
     <>
       {pathSegments &&
-        pathSegments.map((seg, index) => {
-          return <GeoJSON key={seg.properties.gid} data={seg} />;
-        })}
+        pathSegments.map((seg) => (
+          <GeoJSON key={seg.properties.gid} data={seg} />
+        ))}
       {locations.destination.loc && (
         <Marker
           position={L.latLng(

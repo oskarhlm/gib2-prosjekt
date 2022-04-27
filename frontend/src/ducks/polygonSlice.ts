@@ -31,7 +31,6 @@ const drivingDistanceSlice = createSlice({
       state.settings = action.payload;
     },
     setPolygon(state, action: PayloadAction<PolygonState['polygon'] | null>) {
-      console.log('slice');
       state.polygon = action.payload;
     },
     setShowPolygon(state, action: PayloadAction<boolean>) {
