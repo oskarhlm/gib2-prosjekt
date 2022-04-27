@@ -25,6 +25,7 @@ export function Locate() {
     const lng = 10.395053;
     dispatch(setUserLocation({ lat, lng }));
     const marker = L.marker([lat, lng], { icon: userIcon, draggable: true });
+    marker.setZIndexOffset(10000);
     marker.on('dragend', (e) => {
       const marker = e.target;
       const position = marker.getLatLng();

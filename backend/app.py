@@ -31,6 +31,15 @@ def hello_world():
     return send_from_directory(app.static_folder, 'index.html')
 
 
+def list_to_sql_tuple(list):
+    out = '('
+    for x in list:
+        out += f"'{x}'" + ','
+    out = out[:-1]
+    out += ')'
+    return out
+
+
 @app.route('/api/attractions/', methods=['GET', 'POST'])
 def get_attractions():
     conn = get_connection()
@@ -41,7 +50,7 @@ def get_attractions():
                 f"select json_agg(st_asgeojson(points.*)::json) \
                     from (  select id, geom, name, fclass \
                             from points_of_interest \
-                            where fclass in {tuple(point_classes)}) as points;"
+                            where fclass in {list_to_sql_tuple(point_classes)}) as points;"
             )
             rows = cur.fetchone()[0]
         return jsonify(rows)

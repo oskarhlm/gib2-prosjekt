@@ -15,6 +15,8 @@ import { RootState } from 'ducks/store';
 import { ButtonRow } from './ButtonRow';
 import { UserDestinationButton } from './UserDestination';
 import HeightLineChart from './HeightLineChart';
+import { CategorySelector } from 'components/CategorySelector';
+import { CategoryList } from 'components/CategoryList';
 
 export const Map = () => {
   const location = useSelector(
@@ -35,6 +37,7 @@ export const Map = () => {
       >
         <div style={{ height: 60, width: 'auto' }}>
           <ButtonRow>
+            <CategorySelector />
             <UserDestinationButton />
           </ButtonRow>
         </div>
@@ -53,6 +56,7 @@ export const Map = () => {
         </div>
       </div>
       <MapContainer center={[63.4346, 10.3985]} zoom={13} zoomControl={false}>
+        <CategoryList />
         <HeightLineChart />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -12,10 +12,21 @@ export default class Api implements IApi {
   // api_url = 'http://localhost:5000/api';
   api_url = api_url;
 
-  async fetchPointsOfInterest(): Promise<POI[]> {
-    const res = await fetch(
-      this.api_url + '/attractions?pointClasses=hospital,bakery'
-    );
+  async fetchPointsOfInterest(categories: string[]): Promise<POI[]> {
+    if (categories.length === 0) {
+      return [];
+    }
+
+    let text = '';
+    for (let category of categories) {
+      text += category;
+      text += ',';
+    }
+    text = text.substring(0, text.length - 1);
+    console.log(this.api_url + `/attractions?pointClasses=${text}`);
+
+    const res = await fetch(this.api_url + `/attractions?pointClasses=${text}`);
+
     const data = await res.json();
     return data;
   }

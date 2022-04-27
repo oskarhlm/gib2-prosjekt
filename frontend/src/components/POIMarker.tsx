@@ -8,22 +8,17 @@ import { Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { setPOI as setPoints } from 'ducks/POISlice';
 import { RootState } from 'ducks/store';
+import { allIcons } from 'assets/icons';
 
 export type POI = GeoJSON.Feature<
   GeoJSON.Point,
-  { id: number; name: string; fclass: string }
+  { id: number; name: string; fclass: string; iconNumber: number }
 >;
 
 export function POIMarker() {
   const api = new Api();
   const dispatch = useDispatch();
   const points = useSelector((state: RootState) => state.POI);
-
-  useEffect(() => {
-    api.fetchPointsOfInterest().then((data) => {
-      dispatch(setPoints(data));
-    });
-  }, []);
 
   const handleFindPath = (p: POI) => {
     dispatch(
@@ -38,11 +33,13 @@ export function POIMarker() {
     <>
       {points.map((p) => {
         const loc = [...p.geometry.coordinates];
+        console.log(allIcons[p.properties.iconNumber]);
         return (
           <Marker
             key={p.properties.id}
             position={L.latLng(loc.reverse() as [number, number])}
-            icon={defaultIcon}
+            // icon={defaultIcon}
+            icon={allIcons[p.properties.iconNumber]}
           >
             <Popup>
               <div>
