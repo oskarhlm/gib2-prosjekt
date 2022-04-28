@@ -45,10 +45,15 @@ export const SettingsForm = () => {
         name="latestFinishTime"
         label="Tur ferdig innen"
         rules={[
+          // { required: true, message: 'Vennligst angi en sluttid for turen' },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (value.diff(moment()) > 0) {
+              if (value && value.diff(moment()) > 0) {
                 return Promise.resolve();
+              } else if (!value) {
+                return Promise.reject(
+                  new Error('Vennligst angi en sluttid for turen')
+                );
               }
               return Promise.reject(
                 new Error('Tidsreise er ikke oppfunnet enda...')

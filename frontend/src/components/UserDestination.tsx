@@ -34,7 +34,6 @@ export const UserDestinationButton = () => {
     category: string;
     customCategory: string;
   }) => {
-    console.log(values);
     destination.loc &&
       api.addPointOfInterest({
         title: values.title,
