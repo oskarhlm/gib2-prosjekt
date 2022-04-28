@@ -41,7 +41,22 @@ export const SettingsForm = () => {
         experienceLevel: '3',
       }}
     >
-      <Form.Item name="latestFinishTime" label="Tur ferdig innen">
+      <Form.Item
+        name="latestFinishTime"
+        label="Tur ferdig innen"
+        rules={[
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (value.diff(moment()) > 0) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error('Tidsreise er ikke oppfunnet enda...')
+              );
+            },
+          }),
+        ]}
+      >
         <TimePicker showNow={false} />
       </Form.Item>
       <Form.Item name="roundTrip" valuePropName="checked">

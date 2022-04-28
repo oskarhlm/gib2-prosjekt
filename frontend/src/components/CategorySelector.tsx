@@ -41,13 +41,10 @@ export const CategorySelector = () => {
   ];
 
   const onFinish = (values: { categories: string[] }) => {
-    console.log(values.categories.slice(0, 5));
-
     dispatch(setCategoriesUsed(values.categories.slice(0, 5)));
     dispatch(setPoints([]));
 
     api.fetchPointsOfInterest(values.categories.slice(0, 5)).then((data) => {
-      console.log(data);
       for (let i = 0; i < data.length; i++) {
         data[i].properties.iconNumber = values.categories.indexOf(
           data[i].properties.fclass
@@ -84,7 +81,7 @@ export const CategorySelector = () => {
           <Form.Item name="categories">
             <Select
               mode="multiple"
-              maxTagCount={6}
+              maxTagCount={5}
               maxTagPlaceholder={'For mange kategorier valgt!'}
             >
               {categories.map((category) => (

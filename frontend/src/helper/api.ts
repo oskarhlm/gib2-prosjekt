@@ -23,7 +23,6 @@ export default class Api implements IApi {
       text += ',';
     }
     text = text.substring(0, text.length - 1);
-    console.log(this.api_url + `/attractions?pointClasses=${text}`);
 
     const res = await fetch(this.api_url + `/attractions?pointClasses=${text}`);
 

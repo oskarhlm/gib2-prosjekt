@@ -1,12 +1,9 @@
 import Api from 'helper/api';
-import { useEffect, useState } from 'react';
 import { Marker, Popup } from 'react-leaflet';
-import { defaultIcon } from 'assets/icons';
 import L from 'leaflet';
 import { setDestination } from 'ducks/locationsSlice';
 import { Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { setPOI as setPoints } from 'ducks/POISlice';
 import { RootState } from 'ducks/store';
 import { allIcons } from 'assets/icons';
 
@@ -33,12 +30,10 @@ export function POIMarker() {
     <>
       {points.map((p) => {
         const loc = [...p.geometry.coordinates];
-        console.log(allIcons[p.properties.iconNumber]);
         return (
           <Marker
             key={p.properties.id}
             position={L.latLng(loc.reverse() as [number, number])}
-            // icon={defaultIcon}
             icon={allIcons[p.properties.iconNumber]}
           >
             <Popup>

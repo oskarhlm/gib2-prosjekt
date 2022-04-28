@@ -27,7 +27,6 @@ const drivingDistanceSlice = createSlice({
       state,
       action: PayloadAction<PolygonState['settings'] | null>
     ) {
-      console.log('updating settings');
       state.settings = action.payload;
     },
     setPolygon(state, action: PayloadAction<PolygonState['polygon'] | null>) {

@@ -17,7 +17,7 @@ export const CategoryList = () => {
         left: 24,
         // display: 'flex',
         zIndex: 420,
-        opacity: 0.8,
+        opacity: 0.95,
         backgroundColor: 'rgba(249, 249, 249, 0.712)',
         paddingTop: 20,
         borderRadius: 20,
@@ -28,7 +28,7 @@ export const CategoryList = () => {
           allIconsUrls.map(
             (url, index) =>
               index < categories.length && (
-                <li>
+                <li key={index}>
                   <img src={url} style={{ padding: 10 }} />
                   <h3
                     style={{
